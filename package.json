@@ -1,0 +1,14 @@
+{
+  "name": "notes-api",
+  "version": "1.0.0",
+  "description": "Lab 1 - Hello Cloud API - Dien toan dam may",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node --test"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
+
