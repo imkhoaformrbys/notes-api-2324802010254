@@ -7,8 +7,10 @@
     "start": "node src/server.js",
     "test": "node --test"
   },
+  "dependencies": {
+    "express": "^4.19.2"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC"
 }
-

@@ -105,28 +105,28 @@
       <tbody>
         <tr>
           <td>Thời gian từ lúc bắt đầu đến khi chạy được <code>node -v</code></td>
-          <td>[Điền – VD: 15 phút cài Node.js]</td>
-          <td>[Điền – VD: ~90 giây]</td>
+          <td>~15 phút (tải và cài Node.js thủ công)</td>
+          <td>~90 giây (Node.js đã cài sẵn)</td>
         </tr>
         <tr>
           <td>Số CPU, RAM (từ API)</td>
-          <td>[Điền – VD: 8 CPU, 16 GB]</td>
-          <td>[Điền – VD: 2 CPU, 8 GB]</td>
+          <td>12 CPU, 16 GB RAM</td>
+          <td>2 CPU, 7.8 GB RAM</td>
         </tr>
         <tr>
           <td>Hệ điều hành</td>
-          <td>[Điền – VD: Windows 11]</td>
-          <td>[Điền – VD: Linux 6.x]</td>
+          <td>Windows 11 (NT 10.0.26300)</td>
+          <td>Linux 6.8.0-1064-azure</td>
         </tr>
         <tr>
           <td>Cách truy cập từ thiết bị khác</td>
-          <td>[Điền – VD: Cần cấu hình NAT/firewall]</td>
-          <td>[Điền – VD: Đổi Port sang Public, truy cập qua URL *.app.github.dev]</td>
+          <td>Cần cấu hình NAT/port forwarding, phức tạp</td>
+          <td>Đổi Port sang Public, truy cập qua URL *.app.github.dev</td>
         </tr>
         <tr>
           <td>Chi phí, đo bằng gì</td>
-          <td>[Điền – VD: Mua máy ~15 triệu, điện]</td>
-          <td>[Điền – VD: Miễn phí 120 core-giờ/tháng, đo bằng core-giờ]</td>
+          <td>Mua máy ~15 triệu, tiền điện, không đo tự động</td>
+          <td>Miễn phí 120 core-giờ/tháng, đo bằng core-giờ</td>
         </tr>
       </tbody>
     </table>
@@ -164,22 +164,26 @@
 
     <h3 style="margin-top:15px; color:#444;">1. Trường <code>host</code> có đổi không khi Stop rồi Start lại?</h3>
     <p style="margin: 8px 0 15px; padding-left: 15px;">
-      [Điền câu trả lời – Gợi ý: Có, trường <code>host</code> thường thay đổi vì khi Stop, máy ảo được giải phóng về pool tài nguyên chung. Khi Start lại, một máy ảo mới được cấp phát từ pool – đây chính là biểu hiện của <em>Resource pooling</em>.]
+      <strong>Trả lời:</strong> Có, trường <code>host</code> sẽ thay đổi. Khi thực hiện Stop codespace, máy ảo/container được thu hồi và giải phóng tài nguyên về kho dùng chung (resource pool) của GitHub/Azure. Khi Start lại, một node máy chủ hoặc container mới trong pool tài nguyên sẽ được cấp phát ngẫu nhiên, dẫn đến giá trị định danh <code>host</code> thay đổi. Điều này minh chứng rõ ràng cho đặc tính <em>Gộp tài nguyên (Resource pooling)</em> của điện toán đám mây.
     </p>
 
     <h3 style="color:#444;">2. Codespaces là IaaS, PaaS hay SaaS?</h3>
     <p style="margin: 8px 0 15px; padding-left: 15px;">
-      [Điền câu trả lời – Gợi ý: Codespaces gần nhất với <strong>PaaS</strong>. GitHub quản lý hệ điều hành và runtime (Node.js, Python… đã được cài sẵn). Sinh viên chỉ quản lý mã nguồn. Tuy nhiên cũng có đặc điểm IaaS vì cho phép truy cập terminal root.]
+      <strong>Trả lời:</strong> GitHub Codespaces nằm ở ranh giới giữa <strong>PaaS (Platform as a Service)</strong> và <strong>IaaS</strong>, nhưng gần với <strong>PaaS</strong> nhất:
+      <br>- <em>Bên cung cấp dịch vụ (GitHub/Azure):</em> Quản lý hạ tầng ảo hóa, hệ điều hành (Linux container), cùng toàn bộ runtime và công cụ phát triển (Node.js, Git, Docker, VS Code server...).
+      <br>- <em>Người dùng (Sinh viên/Lập trình viên):</em> Chỉ tập trung vào phát triển, quản lý mã nguồn và ứng dụng của mình.
+      <br>- <em>Mở rộng:</em> Codespaces vẫn cho phép quyền truy cập terminal cấp root (sudo) để cài thêm gói hệ điều hành khi cần.
     </p>
 
     <h3 style="color:#444;">3. Hai hạn chế của cách truyền thống và một rủi ro mới</h3>
     <p style="margin: 8px 0; padding-left: 15px;">
-      <strong>Hạn chế truyền thống:</strong><br>
-      [Điền – Gợi ý: (1) Mất nhiều thời gian cài đặt môi trường, dễ gặp lỗi khác nhau trên mỗi máy. (2) Sinh viên không thể truy cập từ thiết bị khác hoặc làm việc ngoài phòng lab.]
+      <strong>Hai hạn chế của cách làm truyền thống (cài cục bộ trên máy phòng lab):</strong><br>
+      1. <em>Mất nhiều thời gian thiết lập & thiếu đồng nhất:</em> Phải tốn thời gian tải và cài đặt môi trường trên từng máy, dễ phát sinh lỗi do xung đột phiên bản ("chạy trên máy này nhưng lỗi trên máy khác").<br>
+      2. <em>Tính linh động và khả năng chia sẻ kém:</em> Mã nguồn và môi trường bị gắn chặt vào máy vật lý tại phòng lab, khó truy cập từ xa hoặc chia sẻ thử nghiệm ra môi trường mạng ngoài.
     </p>
     <p style="margin: 8px 0 15px; padding-left: 15px;">
-      <strong>Rủi ro mới từ đám mây:</strong><br>
-      [Điền – Gợi ý: Phụ thuộc vào kết nối Internet – nếu mất mạng thì không thể làm việc. Ngoài ra có rủi ro về bảo mật dữ liệu khi code nằm trên server của bên thứ ba.]
+      <strong>Một rủi ro mới mà đám mây đưa vào:</strong><br>
+      <em>Phụ thuộc hoàn toàn vào kết nối mạng Internet và nhà cung cấp:</em> Khi mạng bị gián đoạn hoặc dịch vụ đám mây gặp sự cố, quy trình lập trình bị ngưng trệ hoàn toàn. Đồng thời cần lưu ý về an toàn dữ liệu và chi phí phát sinh nếu vượt hạn mức tài nguyên (quota).
     </p>
 
     <footer>
