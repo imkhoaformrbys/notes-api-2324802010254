@@ -296,26 +296,26 @@ docs</code></pre>
           <tr>
             <td><strong>0</strong></td>
             <td>Giữ nguyên cấu hình gốc</td>
-            <td><strong>10.0 giây</strong></td>
-            <td>Cả 2 VM được cấp phát đủ trên Host (tổng 8 PEs). 4 cloudlet chia đều cho 2 VM (mỗi VM gánh 2 cloudlet x 2 PEs = 4 PEs, khớp số lõi VM) nên chạy tối đa công suất song song.</td>
+            <td><strong>20.1 giây</strong></td>
+            <td>Cả 2 VM được cấp phát đủ trên Host (tổng 8 cores). 4 cloudlet chia đều cho 2 VM (mỗi VM 2 cloudlet), thực thi song song từ 0.1s và hoàn thành cùng lúc ở 20.1s (thời gian thực thi 20.0s do UtilizationModel = 0.5).</td>
           </tr>
           <tr>
             <td><strong>1</strong></td>
             <td>Nhân đôi VMS (<code>VMS = 4</code>)</td>
-            <td><strong>10.0 giây</strong><br><em>(Có VM bị lỗi không tạo được)</em></td>
-            <td><strong>Log báo lỗi:</strong> 4 VMs x 4 PEs = 16 PEs vượt quá 8 PEs của Host. Do đó chỉ có VM 0 và VM 1 được tạo thành công, VM 2 và VM 3 bị từ chối đặt lên Host. 4 cloudlet tiếp tục chạy trên 2 VM active và hoàn thành ở 10.0s.</td>
+            <td><strong>20.1 giây</strong><br><em>(Có VM bị lỗi không tạo được)</em></td>
+            <td><strong>Log báo lỗi:</strong> 4 VMs x 4 PEs = 16 PEs vượt quá 8 PEs của Host. Do đó chỉ có VM 0 và VM 1 được tạo thành công, VM 2 và VM 3 bị từ chối đặt lên Host do thiếu CPU. 4 cloudlet tiếp tục chạy trên 2 VM active và hoàn thành ở 20.1s.</td>
           </tr>
           <tr>
             <td><strong>2</strong></td>
             <td>Nhân đôi CLOUDLETS (<code>CLOUDLETS = 8</code>, <code>VMS = 2</code>)</td>
-            <td><strong>20.0 giây</strong></td>
-            <td>Mỗi VM nhận 4 cloudlet (cần tổng cộng 8 PEs), vượt quá 4 PEs của VM. Do dùng bộ lập lịch mặc định <code>TimeShared</code>, 4 PEs bị chia đều cho 4 task khiến tốc độ mỗi task giảm còn 50%, tất cả hoàn thành cùng lúc ở 20.0s.</td>
+            <td><strong>65.7 giây</strong></td>
+            <td>Mỗi VM nhận 4 cloudlet. Do dùng bộ lập lịch mặc định <code>TimeShared</code>, tài nguyên CPU bị chia sẻ cho nhiều task đồng thời, khiến tiến độ xử lý bị kéo dài, cloudlet cuối cùng hoàn thành tại 65.7s.</td>
           </tr>
           <tr>
             <td><strong>3</strong></td>
             <td>Đổi bộ lập lịch sang <code>CloudletSchedulerSpaceShared</code> (với <code>CLOUDLETS = 8</code>)</td>
-            <td><strong>20.0 giây</strong><br><em>(Các task hoàn thành so le 10s & 20s)</em></td>
-            <td>Mỗi cloudlet được cấp độc quyền 2 PEs (chính sách FIFO). 4 cloudlet đầu chạy hết tốc lực và hoàn thành lúc <strong>10.0s</strong>; 4 cloudlet xếp hàng sau bắt đầu chạy lúc 10.0s và hoàn thành tại <strong>20.0s</strong>.</td>
+            <td><strong>40.3 giây</strong><br><em>(Các task hoàn thành so le 20.1s & 40.3s)</em></td>
+            <td>Mỗi cloudlet được cấp độc quyền 2 cores (chính sách FIFO). 4 cloudlet đầu (ID 0, 2, 1, 3) chạy hết công suất và hoàn thành sớm lúc <strong>20.1s</strong>; 4 cloudlet xếp hàng sau (ID 4, 6, 5, 7) bắt đầu lúc 20.2s và hoàn thành tại <strong>40.3s</strong>.</td>
           </tr>
         </tbody>
       </table>
