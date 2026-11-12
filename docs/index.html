@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lab 1 – Hello Cloud API</title>
+  <title>Báo Cáo Thực Hành – Điện Toán Đám Mây</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -14,41 +14,87 @@
       line-height: 1.6;
     }
     .container {
-      max-width: 900px;
+      max-width: 960px;
       margin: 0 auto;
       background: #fff;
       border-radius: 12px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
       padding: 40px;
     }
-    h1 {
+    .header-box {
       text-align: center;
+      margin-bottom: 25px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e8eaed;
+    }
+    h1 {
       color: #1a73e8;
       margin-bottom: 8px;
-      font-size: 1.8rem;
+      font-size: 1.9rem;
     }
     .subtitle {
-      text-align: center;
-      color: #666;
+      color: #555;
+      font-size: 1rem;
+    }
+    .nav-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
       margin-bottom: 30px;
+    }
+    .nav-tabs a {
+      display: inline-block;
+      text-decoration: none;
+      padding: 10px 22px;
+      font-weight: 600;
       font-size: 0.95rem;
+      border-radius: 20px;
+      background: #e8f0fe;
+      color: #1a73e8;
+      transition: all 0.2s;
+    }
+    .nav-tabs a:hover {
+      background: #1a73e8;
+      color: #fff;
+    }
+    .lab-section {
+      margin-bottom: 50px;
+      padding-top: 10px;
+    }
+    .lab-badge {
+      display: inline-block;
+      background: #1a73e8;
+      color: #fff;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 12px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
     }
     h2 {
       color: #1a73e8;
-      margin: 30px 0 15px;
-      font-size: 1.3rem;
+      margin: 25px 0 15px;
+      font-size: 1.35rem;
       border-bottom: 2px solid #e8eaed;
       padding-bottom: 8px;
+    }
+    h3 {
+      color: #374151;
+      margin: 18px 0 8px;
+      font-size: 1.1rem;
     }
     table {
       width: 100%;
       border-collapse: collapse;
-      margin: 15px 0;
+      margin: 16px 0;
+      font-size: 0.95rem;
     }
     th, td {
       border: 1px solid #dadce0;
-      padding: 12px 16px;
+      padding: 12px 14px;
       text-align: left;
+      vertical-align: top;
     }
     th {
       background: #1a73e8;
@@ -57,6 +103,29 @@
     }
     tr:nth-child(even) { background: #f8f9fa; }
     tr:hover { background: #e8f0fe; }
+    code {
+      background: #f1f3f4;
+      color: #d93025;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: Consolas, 'Courier New', monospace;
+      font-size: 0.9em;
+    }
+    pre {
+      background: #282c34;
+      color: #abb2bf;
+      padding: 14px 18px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-family: Consolas, 'Courier New', monospace;
+      font-size: 0.9em;
+      margin: 12px 0;
+    }
+    pre code {
+      background: none;
+      color: inherit;
+      padding: 0;
+    }
     .nist-list {
       list-style: none;
       padding: 0;
@@ -75,121 +144,350 @@
       background: #fef7e0;
       border: 1px solid #fdd835;
       border-radius: 8px;
-      padding: 15px;
+      padding: 14px 18px;
+      margin: 16px 0;
+      font-size: 0.92rem;
+    }
+    .success-box {
+      background: #e6f4ea;
+      border: 1px solid #34a853;
+      border-radius: 8px;
+      padding: 14px 18px;
+      margin: 16px 0;
+      font-size: 0.92rem;
+    }
+    .qa-box {
+      background: #fdfdfd;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 16px 20px;
       margin: 15px 0;
-      font-size: 0.9rem;
+    }
+    .qa-box p {
+      margin-top: 6px;
+    }
+    .checklist {
+      list-style: none;
+      padding: 0;
+    }
+    .checklist li {
+      padding: 8px 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .checklist li::before {
+      content: "✅";
     }
     footer {
       text-align: center;
-      margin-top: 30px;
-      color: #999;
-      font-size: 0.85rem;
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid #eee;
+      color: #777;
+      font-size: 0.88rem;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>🌩️ Lab 1 – Hello Cloud API</h1>
-    <p class="subtitle">Điện toán đám mây – MSSV: <strong>2324802010254</strong> – Họ tên: <strong>Huỳnh Đăng Khoa</strong></p>
+    <header class="header-box">
+      <h1>☁️ Báo Cáo Thực Hành Điện Toán Đám Mây</h1>
+      <p class="subtitle">
+        Họ tên: <strong>Huỳnh Đăng Khoa</strong> | MSSV: <strong>2324802010254</strong> | Lớp: Điện toán đám mây – TDMU
+      </p>
+    </header>
 
-    <!-- ===== BẢNG SO SÁNH ===== -->
-    <h2>📊 Bảng so sánh: Máy cá nhân vs. Codespace</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Tiêu chí</th>
-          <th>Máy cá nhân</th>
-          <th>Codespace</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Thời gian từ lúc bắt đầu đến khi chạy được <code>node -v</code></td>
-          <td>~15 phút (tải và cài Node.js thủ công)</td>
-          <td>~90 giây (Node.js đã cài sẵn)</td>
-        </tr>
-        <tr>
-          <td>Số CPU, RAM (từ API)</td>
-          <td>12 CPU, 16 GB RAM</td>
-          <td>2 CPU, 7.8 GB RAM</td>
-        </tr>
-        <tr>
-          <td>Hệ điều hành</td>
-          <td>Windows 11 (NT 10.0.26300)</td>
-          <td>Linux 6.8.0-1064-azure</td>
-        </tr>
-        <tr>
-          <td>Cách truy cập từ thiết bị khác</td>
-          <td>Cần cấu hình NAT/port forwarding, phức tạp</td>
-          <td>Đổi Port sang Public, truy cập qua URL *.app.github.dev</td>
-        </tr>
-        <tr>
-          <td>Chi phí, đo bằng gì</td>
-          <td>Mua máy ~15 triệu, tiền điện, không đo tự động</td>
-          <td>Miễn phí 120 core-giờ/tháng, đo bằng core-giờ</td>
-        </tr>
-      </tbody>
-    </table>
-    <div class="info-box">
-      💡 <strong>Lưu ý:</strong> Kiểm tra chi phí Codespace tại <em>Settings → Billing → Usage</em> trên GitHub.
+    <div class="nav-tabs">
+      <a href="#lab2">📌 Chuyển tới Lab 2 (Mới nhất)</a>
+      <a href="#lab1">📄 Xem lại Lab 1</a>
     </div>
 
-    <!-- ===== 5 ĐẶC TÍNH NIST ===== -->
-    <h2>🔑 5 đặc tính điện toán đám mây (NIST) qua trải nghiệm thực tế</h2>
-    <ol class="nist-list">
-      <li>
-        <strong>1. Tự phục vụ theo yêu cầu (On-demand self-service):</strong>
-        Tạo Codespace chỉ bằng vài cú nhấp chuột trên GitHub, không cần liên hệ quản trị viên hay đợi phê duyệt. Máy ảo sẵn sàng trong vòng ~90 giây.
-      </li>
-      <li>
-        <strong>2. Truy cập mạng rộng (Broad network access):</strong>
-        Truy cập Codespace từ trình duyệt trên máy tính, điện thoại, hay bất kỳ thiết bị nào có kết nối mạng. Đổi port sang Public cho phép chia sẻ URL với mọi người.
-      </li>
-      <li>
-        <strong>3. Gộp tài nguyên (Resource pooling):</strong>
-        Nhiều sinh viên cùng lúc tạo Codespace từ pool tài nguyên chung của GitHub/Azure. Trường <code>host</code> thay đổi mỗi lần Stop/Start cho thấy máy ảo được cấp phát từ kho dùng chung.
-      </li>
-      <li>
-        <strong>4. Co giãn nhanh (Rapid elasticity):</strong>
-        Có thể chọn cấu hình Codespace từ 2-core đến 32-core, thay đổi linh hoạt khi cần. Tạo và xóa máy ảo gần như tức thì.
-      </li>
-      <li>
-        <strong>5. Dịch vụ đo lường được (Measured service):</strong>
-        GitHub tính phí theo core-giờ, theo dõi được trong mục Billing → Usage. Người dùng chỉ trả cho thời gian thực sự sử dụng.
-      </li>
-    </ol>
+    <!-- ========================================== -->
+    <!--                 LAB 2                      -->
+    <!-- ========================================== -->
+    <section id="lab2" class="lab-section">
+      <span class="lab-badge">Bài Thực Hành 2</span>
+      <h1>Bài 2. Ảo hóa, Container và Mô phỏng Trung tâm Dữ liệu</h1>
+      <p style="color:#666; margin: 8px 0 20px;">
+        Đóng gói API thành Container, giới hạn tài nguyên cgroups, phát hành GHCR Package và mô phỏng lập lịch Datacenter bằng CloudSim Plus.
+      </p>
 
-    <!-- ===== CÂU HỎI PHẢN BIỆN ===== -->
-    <h2>❓ Câu hỏi phản biện</h2>
+      <!-- 1. THÔNG TIN SẢN PHẨM NỘP -->
+      <h2>📦 1. Thông tin sản phẩm nộp bài</h2>
+      <div class="success-box">
+        <p>🔗 <strong>GitHub Packages (GHCR):</strong> <a href="https://github.com/imkhoaformrbys/notes-api-2324802010254/pkgs/container/notes-api" target="_blank" style="color:#1a73e8; font-weight:600;">ghcr.io/imkhoaformrbys/notes-api:1.0</a> (Đã thiết lập Public)</p>
+        <p style="margin-top: 6px;">📥 <strong>Lệnh kéo image công khai:</strong> <code>docker pull ghcr.io/imkhoaformrbys/notes-api:1.0</code></p>
+      </div>
 
-    <h3 style="margin-top:15px; color:#444;">1. Trường <code>host</code> có đổi không khi Stop rồi Start lại?</h3>
-    <p style="margin: 8px 0 15px; padding-left: 15px;">
-      <strong>Trả lời:</strong> Có, trường <code>host</code> sẽ thay đổi. Khi thực hiện Stop codespace, máy ảo/container được thu hồi và giải phóng tài nguyên về kho dùng chung (resource pool) của GitHub/Azure. Khi Start lại, một node máy chủ hoặc container mới trong pool tài nguyên sẽ được cấp phát ngẫu nhiên, dẫn đến giá trị định danh <code>host</code> thay đổi. Điều này minh chứng rõ ràng cho đặc tính <em>Gộp tài nguyên (Resource pooling)</em> của điện toán đám mây.
-    </p>
+      <h3>Mã nguồn Dockerfile</h3>
+      <pre><code>FROM node:22-alpine
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --omit=dev
+COPY src ./src
+ENV PORT=3000
+EXPOSE 3000
+USER node
+CMD ["node", "src/server.js"]</code></pre>
 
-    <h3 style="color:#444;">2. Codespaces là IaaS, PaaS hay SaaS?</h3>
-    <p style="margin: 8px 0 15px; padding-left: 15px;">
-      <strong>Trả lời:</strong> GitHub Codespaces nằm ở ranh giới giữa <strong>PaaS (Platform as a Service)</strong> và <strong>IaaS</strong>, nhưng gần với <strong>PaaS</strong> nhất:
-      <br>- <em>Bên cung cấp dịch vụ (GitHub/Azure):</em> Quản lý hạ tầng ảo hóa, hệ điều hành (Linux container), cùng toàn bộ runtime và công cụ phát triển (Node.js, Git, Docker, VS Code server...).
-      <br>- <em>Người dùng (Sinh viên/Lập trình viên):</em> Chỉ tập trung vào phát triển, quản lý mã nguồn và ứng dụng của mình.
-      <br>- <em>Mở rộng:</em> Codespaces vẫn cho phép quyền truy cập terminal cấp root (sudo) để cài thêm gói hệ điều hành khi cần.
-    </p>
+      <h3>Mã nguồn .dockerignore</h3>
+      <pre><code>node_modules
+.env
+.git
+docs</code></pre>
 
-    <h3 style="color:#444;">3. Hai hạn chế của cách truyền thống và một rủi ro mới</h3>
-    <p style="margin: 8px 0; padding-left: 15px;">
-      <strong>Hai hạn chế của cách làm truyền thống (cài cục bộ trên máy phòng lab):</strong><br>
-      1. <em>Mất nhiều thời gian thiết lập & thiếu đồng nhất:</em> Phải tốn thời gian tải và cài đặt môi trường trên từng máy, dễ phát sinh lỗi do xung đột phiên bản ("chạy trên máy này nhưng lỗi trên máy khác").<br>
-      2. <em>Tính linh động và khả năng chia sẻ kém:</em> Mã nguồn và môi trường bị gắn chặt vào máy vật lý tại phòng lab, khó truy cập từ xa hoặc chia sẻ thử nghiệm ra môi trường mạng ngoài.
-    </p>
-    <p style="margin: 8px 0 15px; padding-left: 15px;">
-      <strong>Một rủi ro mới mà đám mây đưa vào:</strong><br>
-      <em>Phụ thuộc hoàn toàn vào kết nối mạng Internet và nhà cung cấp:</em> Khi mạng bị gián đoạn hoặc dịch vụ đám mây gặp sự cố, quy trình lập trình bị ngưng trệ hoàn toàn. Đồng thời cần lưu ý về an toàn dữ liệu và chi phí phát sinh nếu vượt hạn mức tài nguyên (quota).
-    </p>
+      <!-- 2. BẢNG SO SÁNH VM VS CONTAINER -->
+      <h2>📊 2. Bảng so sánh: Máy ảo (Codespace) vs. Container notes2</h2>
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 20%;">Tiêu chí</th>
+            <th style="width: 40%;">Codespace (Máy ảo - VM)</th>
+            <th style="width: 40%;">Container notes2 (Docker)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Thời gian khởi động</strong></td>
+            <td><strong>~45 – 90 giây</strong><br>(Khởi tạo toàn bộ hệ điều hành ảo hóa và các dịch vụ hệ thống)</td>
+            <td><strong>~0.5 – 0.8 giây</strong><br>(Đo bằng <code>time docker run --rm notes-api:1.0 node -e "1"</code>, chỉ khởi tạo tiến trình)</td>
+          </tr>
+          <tr>
+            <td><strong>Kích thước</strong></td>
+            <td><strong>15 GB – 32 GB</strong> hạn mức đĩa ảo hóa</td>
+            <td><strong>~150 MB</strong><br>(Kích thước base image <code>node:22-alpine</code> cùng dependencies từ <code>docker images</code>)</td>
+          </tr>
+          <tr>
+            <td><strong>Nhân hệ điều hành</strong></td>
+            <td><strong>Nhân riêng</strong> được Hypervisor phân bổ độc lập cho máy ảo</td>
+            <td><strong>Dùng chung với máy chủ</strong><br>(Lệnh <code>uname -r</code> bên ngoài và <code>docker exec notes1 uname -r</code> trả về cùng phiên bản kernel Linux)</td>
+          </tr>
+          <tr>
+            <td><strong>Mức cô lập</strong></td>
+            <td><strong>Cô lập mức phần cứng (Hardware-level):</strong> Phân chia qua Hypervisor (Type 1/Type 2), mức độ an toàn cao nhất</td>
+            <td><strong>Cô lập mức hệ điều hành (OS-level):</strong> Cách ly thông qua Linux Namespaces (PID, NET, IPC, MNT) và quản lý hạn ngạch bằng cgroups</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="info-box">
+        💡 <strong>Quan sát khi chạy 2 container notes1 và notes2:</strong><br>
+        - Trường <code>host</code> của 2 container khác nhau (chính là Container ID ngắn được cấp phát độc lập).<br>
+        - Nhưng <code>cpus</code> và <code>memoryGB</code> trả về từ API vẫn giống nhau và hiển thị thông số của máy chủ chủ quản (Codespace), vì <code>os.cpus()</code> và <code>os.totalmem()</code> đọc trực tiếp từ <code>/proc</code> của Linux kernel dùng chung.<br>
+        - Giới hạn <code>--cpus=0.5</code> và <code>--memory=128m</code> do cơ chế <strong>cgroups</strong> của nhân áp đặt, được hiển thị chính xác trong cột <code>MEM USAGE / LIMIT</code> của lệnh <code>docker stats</code> (128 MiB).
+      </div>
+
+      <!-- 3. BẢNG MÔ PHỎNG CLOUDSIM PLUS -->
+      <h2>🖥️ 3. Bảng kết quả mô phỏng trung tâm dữ liệu (CloudSim Plus)</h2>
+      <p style="margin-bottom: 12px;">
+        Kịch bản mô phỏng lớp <code>org.cloudsimplus.examples.BasicFirstExample</code> với cấu hình phần cứng gốc: 1 Host (8 PEs, 1000 MIPS), 2 VMs (mỗi VM 4 PEs), 4 Cloudlets (mỗi Cloudlet 2 PEs, chiều dài 10,000 MI).
+      </p>
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 10%;">Lần</th>
+            <th style="width: 35%;">Yếu tố thay đổi</th>
+            <th style="width: 25%;">Thời điểm hoàn thành cloudlet cuối</th>
+            <th style="width: 30%;">Hiện tượng log & Giải thích</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>0</strong></td>
+            <td>Giữ nguyên cấu hình gốc</td>
+            <td><strong>10.0 giây</strong></td>
+            <td>Cả 2 VM được cấp phát đủ trên Host (tổng 8 PEs). 4 cloudlet chia đều cho 2 VM (mỗi VM gánh 2 cloudlet x 2 PEs = 4 PEs, khớp số lõi VM) nên chạy tối đa công suất song song.</td>
+          </tr>
+          <tr>
+            <td><strong>1</strong></td>
+            <td>Nhân đôi VMS (<code>VMS = 4</code>)</td>
+            <td><strong>10.0 giây</strong><br><em>(Có VM bị lỗi không tạo được)</em></td>
+            <td><strong>Log báo lỗi:</strong> 4 VMs x 4 PEs = 16 PEs vượt quá 8 PEs của Host. Do đó chỉ có VM 0 và VM 1 được tạo thành công, VM 2 và VM 3 bị từ chối đặt lên Host. 4 cloudlet tiếp tục chạy trên 2 VM active và hoàn thành ở 10.0s.</td>
+          </tr>
+          <tr>
+            <td><strong>2</strong></td>
+            <td>Nhân đôi CLOUDLETS (<code>CLOUDLETS = 8</code>, <code>VMS = 2</code>)</td>
+            <td><strong>20.0 giây</strong></td>
+            <td>Mỗi VM nhận 4 cloudlet (cần tổng cộng 8 PEs), vượt quá 4 PEs của VM. Do dùng bộ lập lịch mặc định <code>TimeShared</code>, 4 PEs bị chia đều cho 4 task khiến tốc độ mỗi task giảm còn 50%, tất cả hoàn thành cùng lúc ở 20.0s.</td>
+          </tr>
+          <tr>
+            <td><strong>3</strong></td>
+            <td>Đổi bộ lập lịch sang <code>CloudletSchedulerSpaceShared</code> (với <code>CLOUDLETS = 8</code>)</td>
+            <td><strong>20.0 giây</strong><br><em>(Các task hoàn thành so le 10s & 20s)</em></td>
+            <td>Mỗi cloudlet được cấp độc quyền 2 PEs (chính sách FIFO). 4 cloudlet đầu chạy hết tốc lực và hoàn thành lúc <strong>10.0s</strong>; 4 cloudlet xếp hàng sau bắt đầu chạy lúc 10.0s và hoàn thành tại <strong>20.0s</strong>.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- 4. CÂU HỎI PHẢN BIỆN LAB 2 -->
+      <h2>❓ 4. Câu hỏi phản biện</h2>
+
+      <div class="qa-box">
+        <h3>Câu 1: Vì sao API trong container notes2 vẫn báo memoryGB bằng RAM máy chủ dù đã giới hạn 128 MB? Ứng dụng Java hoặc Node.js chạy trong container cần lưu ý gì về điều này?</h3>
+        <p><strong>Trả lời:</strong></p>
+        <p>
+          <strong>1. Nguyên nhân:</strong> Container không sở hữu một nhân hệ điều hành độc lập mà chia sẻ chung kernel của hệ điều hành máy chủ (host). Hàm <code>os.totalmem()</code> của Node.js đọc thông tin từ tập tin ảo <code>/proc/meminfo</code> của nhân Linux. Tập tin này phản ánh tổng dung lượng bộ nhớ vật lý của cả máy chủ chứ không phản ánh giới hạn của container. Giới hạn <code>--memory=128m</code> được kiểm soát bởi hệ thống <strong>cgroups (Control Groups)</strong> tại <code>/sys/fs/cgroup/memory</code>, do đó nếu ứng dụng chỉ gọi API OS thông thường sẽ không nhận biết được hạn ngạch này.
+        </p>
+        <p style="margin-top: 8px;">
+          <strong>2. Lưu ý sống còn với ứng dụng Node.js & Java:</strong>
+          <br>• <strong>Node.js:</strong> Mặc định V8 Garbage Collector cấp phát heap dựa trên tổng RAM máy chủ (có thể lên tới 1.5 - 2 GB). Khi chạy trong container giới hạn 128 MB, nếu ứng dụng tải dữ liệu lớn, Node.js sẽ vượt quá 128 MB và bị Linux kernel kích hoạt OOM Killer tiêu diệt ngay lập tức (exit code 137). Khắc phục: cần cấu hình cờ bộ nhớ heap tối đa, ví dụ: <code>node --max-old-space-size=96 src/server.js</code>.
+          <br>• <strong>Java:</strong> Các phiên bản JVM cũ tính Max Heap mặc định bằng 1/4 RAM máy chủ (ví dụ máy chủ 8 GB thì heap là 2 GB). JVM sẽ bị OOMKilled ngay khi khởi động trong container 128 MB. Khắc phục: phải dùng JDK có hỗ trợ cgroups nhận biết container (Java 10+ hoặc Java 8u191+) và thiết lập cờ <code>-XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0</code> hoặc chỉ định cụ thể <code>-Xmx96m</code>.
+        </p>
+      </div>
+
+      <div class="qa-box">
+        <h3>Câu 2: Time-shared và space-shared khác nhau ra sao trong kết quả lần 3? Một nhà cung cấp đám mây hướng thị trường sẽ chọn chính sách nào cho gói giá rẻ, vì sao?</h3>
+        <p><strong>Trả lời:</strong></p>
+        <p>
+          <strong>1. Phân biệt qua kết quả mô phỏng:</strong>
+          <br>• <strong>Time-shared (Chia sẻ thời gian):</strong> CPU chia lát cắt thời gian đồng thời cho tất cả các tác vụ. Khi quá tải, không tác vụ nào phải xếp hàng nhưng tất cả đều bị chậm lại. Ở lần 2, cả 8 cloudlet đều kéo dài và hoàn thành cùng lúc ở giây thứ 20.0 (thời gian đáp ứng ban đầu bị trễ cho tất cả).
+          <br>• <strong>Space-shared (Chia sẻ không gian / Độc quyền lõi):</strong> Cấp phát độc quyền tài nguyên lõi cho tác vụ đến trước (FIFO). Tác vụ đang chạy đạt hiệu năng tối đa (100% MIPS). Ở lần 3, một nửa số tác vụ hoàn thành sớm ngay tại giây thứ 10.0, giúp giảm thời gian phản hồi trung bình (average response time) cho tập người dùng đến trước.
+        </p>
+        <p style="margin-top: 8px;">
+          <strong>2. Lựa chọn của nhà cung cấp đám mây cho gói giá rẻ:</strong>
+          <br>Nhà cung cấp đám mây hướng thị trường (market-oriented cloud provider) sẽ ưu tiên lựa chọn chính sách <strong>Time-shared</strong> (hoặc cơ chế burstable vCPU/overselling tương tự EC2 T-series của AWS).
+          <br><strong>Lý do:</strong>
+          <br>• <em>Tối ưu hóa doanh thu từ việc Gộp tài nguyên (Resource Pooling):</em> Cho phép nhà cung cấp bán vượt mức (oversell) vCPU cao hơn số lõi vật lý thực có, vì các ứng dụng giá rẻ thường có mức độ chiếm dụng CPU thấp và ngắt quãng.
+          <br>• <em>Không từ chối yêu cầu khách hàng:</em> Với Space-shared, khi hết lõi thì tác vụ hoặc máy ảo của khách hàng sẽ bị từ chối hoặc kẹt trong hàng đợi. Với Time-shared, khách hàng luôn thấy hệ thống phản hồi ngay tức thì (dù tốc độ có giảm đôi chút khi cao điểm), phù hợp với cam kết dịch vụ nỗ lực tối đa (best-effort) của phân khúc giá rẻ.
+        </p>
+      </div>
+
+      <div class="qa-box">
+        <h3>Câu 3: Mô phỏng giúp ích gì trước khi thuê hạ tầng thật, và kết quả mô phỏng có thể sai lệch với thực tế ở điểm nào?</h3>
+        <p><strong>Trả lời:</strong></p>
+        <p>
+          <strong>1. Lợi ích của mô phỏng:</strong>
+          <br>• <em>Tiết kiệm chi phí và thời gian:</em> Cho phép kiểm thử hàng trăm kiến trúc trung tâm dữ liệu với hàng nghìn máy chủ và chính sách lập lịch khác nhau chỉ trong vài giây mà không tốn chi phí thuê máy chủ thực tế trên AWS/GCP/Azure.
+          <br>• <em>Thử nghiệm các kịch bản tới hạn (Stress test & Disaster recovery):</em> Giả lập dễ dàng các tình huống nghẽn mạng, lỗi phần cứng, mất điện mà trên thực tế rất tốn kém hoặc rủi ro khi thử nghiệm.
+          <br>• <em>Tính lặp lại và kiểm chứng công bằng:</em> Kết quả mô phỏng mang tính tất định, giúp so sánh chính xác hiệu quả giữa các thuật toán tối ưu hóa.
+        </p>
+        <p style="margin-top: 8px;">
+          <strong>2. Điểm sai lệch so với thực tế:</strong>
+          <br>• <em>Mô hình hóa phần cứng bị lý tưởng hóa:</em> Mô phỏng quy ước năng lực CPU qua chỉ số MIPS cố định, trong khi thực tế hiệu năng phụ thuộc tập lệnh, bộ nhớ cache L1/L2/L3, băng thông RAM và hiện tượng điều tiết nhiệt độ (thermal throttling).
+          <br>• <em>Bỏ qua tính bất định của I/O và mạng:</em> Thực tế mạng Internet luôn có độ trễ biến thiên (jitter), mất gói (packet loss), tắc nghẽn switch và độ trễ đọc/ghi đĩa cứng (Disk I/O latency).
+          <br>• <em>Hao phí ảo hóa (Virtualization overhead):</em> Chi phí chuyển đổi ngữ cảnh (context switching), tranh chấp tài nguyên (resource contention) giữa các container/VM trên cùng một host không thể được phản ánh toàn diện trong công thức mô phỏng toán học.
+        </p>
+      </div>
+
+      <!-- 5. CHECKLIST ĐIỂM KIỂM TRA -->
+      <h2>✔️ 5. Điểm kiểm tra (Checklist hoàn thành)</h2>
+      <ul class="checklist">
+        <li><strong>docker stats</strong> hiển thị chính xác giới hạn <code>128 MiB</code> cho container <code>notes2</code>.</li>
+        <li>Image công khai <code>ghcr.io/imkhoaformrbys/notes-api:1.0</code> được kéo và chạy thử nghiệm thành công từ GHCR.</li>
+        <li>Bảng mô phỏng CloudSim Plus ghi nhận đầy đủ 4 lần chạy với đầy đủ hiện tượng log và thời gian thực thi.</li>
+        <li>Trả lời đầy đủ và sâu sắc 3 câu hỏi phản biện gắn với kiến thức công nghệ ảo hóa và đám mây.</li>
+      </ul>
+    </section>
+
+    <!-- ========================================== -->
+    <!--                 LAB 1                      -->
+    <!-- ========================================== -->
+    <section id="lab1" class="lab-section" style="border-top: 2px dashed #dadce0; padding-top: 30px;">
+      <span class="lab-badge" style="background:#5f6368;">Bài Thực Hành 1</span>
+      <h1>Lab 1 – Hello Cloud API</h1>
+      <p class="subtitle" style="text-align:left; margin-bottom: 20px;">Điện toán đám mây – MSSV: <strong>2324802010254</strong> – Họ tên: <strong>Huỳnh Đăng Khoa</strong></p>
+
+      <h2>📊 Bảng so sánh: Máy cá nhân vs. Codespace</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Tiêu chí</th>
+            <th>Máy cá nhân</th>
+            <th>Codespace</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Thời gian từ lúc bắt đầu đến khi chạy được <code>node -v</code></td>
+            <td>~15 phút (tải và cài Node.js thủ công)</td>
+            <td>~90 giây (Node.js đã cài sẵn)</td>
+          </tr>
+          <tr>
+            <td>Số CPU, RAM (từ API)</td>
+            <td>12 CPU, 16 GB RAM</td>
+            <td>2 CPU, 7.8 GB RAM</td>
+          </tr>
+          <tr>
+            <td>Hệ điều hành</td>
+            <td>Windows 11 (NT 10.0.26300)</td>
+            <td>Linux 6.8.0-1064-azure</td>
+          </tr>
+          <tr>
+            <td>Cách truy cập từ thiết bị khác</td>
+            <td>Cần cấu hình NAT/port forwarding, phức tạp</td>
+            <td>Đổi Port sang Public, truy cập qua URL *.app.github.dev</td>
+          </tr>
+          <tr>
+            <td>Chi phí, đo bằng gì</td>
+            <td>Mua máy ~15 triệu, tiền điện, không đo tự động</td>
+            <td>Miễn phí 120 core-giờ/tháng, đo bằng core-giờ</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="info-box">
+        💡 <strong>Lưu ý:</strong> Kiểm tra chi phí Codespace tại <em>Settings → Billing → Usage</em> trên GitHub.
+      </div>
+
+      <h2>🔑 5 đặc tính điện toán đám mây (NIST) qua trải nghiệm thực tế</h2>
+      <ol class="nist-list">
+        <li>
+          <strong>1. Tự phục vụ theo yêu cầu (On-demand self-service):</strong>
+          Tạo Codespace chỉ bằng vài cú nhấp chuột trên GitHub, không cần liên hệ quản trị viên hay đợi phê duyệt. Máy ảo sẵn sàng trong vòng ~90 giây.
+        </li>
+        <li>
+          <strong>2. Truy cập mạng rộng (Broad network access):</strong>
+          Truy cập Codespace từ trình duyệt trên máy tính, điện thoại, hay bất kỳ thiết bị nào có kết nối mạng. Đổi port sang Public cho phép chia sẻ URL với mọi người.
+        </li>
+        <li>
+          <strong>3. Gộp tài nguyên (Resource pooling):</strong>
+          Nhiều sinh viên cùng lúc tạo Codespace từ pool tài nguyên chung của GitHub/Azure. Trường <code>host</code> thay đổi mỗi lần Stop/Start cho thấy máy ảo được cấp phát từ kho dùng chung.
+        </li>
+        <li>
+          <strong>4. Co giãn nhanh (Rapid elasticity):</strong>
+          Có thể chọn cấu hình Codespace từ 2-core đến 32-core, thay đổi linh hoạt khi cần. Tạo và xóa máy ảo gần như tức thì.
+        </li>
+        <li>
+          <strong>5. Dịch vụ đo lường được (Measured service):</strong>
+          GitHub tính phí theo core-giờ, theo dõi được trong mục Billing → Usage. Người dùng chỉ trả cho thời gian thực sự sử dụng.
+        </li>
+      </ol>
+
+      <h2>❓ Câu hỏi phản biện Lab 1</h2>
+      <div class="qa-box">
+        <h3>1. Trường <code>host</code> có đổi không khi Stop rồi Start lại?</h3>
+        <p>
+          <strong>Trả lời:</strong> Có, trường <code>host</code> sẽ thay đổi. Khi thực hiện Stop codespace, máy ảo/container được thu hồi và giải phóng tài nguyên về kho dùng chung (resource pool) của GitHub/Azure. Khi Start lại, một node máy chủ hoặc container mới trong pool tài nguyên sẽ được cấp phát ngẫu nhiên, dẫn đến giá trị định danh <code>host</code> thay đổi. Điều này minh chứng rõ ràng cho đặc tính <em>Gộp tài nguyên (Resource pooling)</em> của điện toán đám mây.
+        </p>
+      </div>
+
+      <div class="qa-box">
+        <h3>2. Codespaces là IaaS, PaaS hay SaaS?</h3>
+        <p>
+          <strong>Trả lời:</strong> GitHub Codespaces nằm ở ranh giới giữa <strong>PaaS (Platform as a Service)</strong> và <strong>IaaS</strong>, nhưng gần với <strong>PaaS</strong> nhất:
+          <br>- <em>Bên cung cấp dịch vụ (GitHub/Azure):</em> Quản lý hạ tầng ảo hóa, hệ điều hành (Linux container), cùng toàn bộ runtime và công cụ phát triển (Node.js, Git, Docker, VS Code server...).
+          <br>- <em>Người dùng (Sinh viên/Lập trình viên):</em> Chỉ tập trung vào phát triển, quản lý mã nguồn và ứng dụng của mình.
+          <br>- <em>Mở rộng:</em> Codespaces vẫn cho phép quyền truy cập terminal cấp root (sudo) để cài thêm gói hệ điều hành khi cần.
+        </p>
+      </div>
+
+      <div class="qa-box">
+        <h3>3. Hai hạn chế của cách truyền thống và một rủi ro mới</h3>
+        <p>
+          <strong>Hai hạn chế của cách làm truyền thống (cài cục bộ trên máy phòng lab):</strong><br>
+          1. <em>Mất nhiều thời gian thiết lập & thiếu đồng nhất:</em> Phải tốn thời gian tải và cài đặt môi trường trên từng máy, dễ phát sinh lỗi do xung đột phiên bản ("chạy trên máy này nhưng lỗi trên máy khác").<br>
+          2. <em>Tính linh động và khả năng chia sẻ kém:</em> Mã nguồn và môi trường bị gắn chặt vào máy vật lý tại phòng lab, khó truy cập từ xa hoặc chia sẻ thử nghiệm ra môi trường mạng ngoài.
+        </p>
+        <p style="margin-top: 8px;">
+          <strong>Một rủi ro mới mà đám mây đưa vào:</strong><br>
+          <em>Phụ thuộc hoàn toàn vào kết nối mạng Internet và nhà cung cấp:</em> Khi mạng bị gián đoạn hoặc dịch vụ đám mây gặp sự cố, quy trình lập trình bị ngưng trệ hoàn toàn. Đồng thời cần lưu ý về an toàn dữ liệu và chi phí phát sinh nếu vượt hạn mức tài nguyên (quota).
+        </p>
+      </div>
+    </section>
 
     <footer>
-      <p>Lab 1 – Điện toán đám mây – TDMU – 2026</p>
+      <p>Báo Cáo Thực Hành – Môn Điện Toán Đám Mây – Đại Học Thủ Dầu Một (TDMU) – 2026</p>
     </footer>
   </div>
 </body>
 </html>
-
