@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Báo cáo Thực hành: Công nghệ Ảo hóa, Đóng gói Container và Mô phỏng Trung tâm Dữ liệu</title>
+  <title>Báo cáo Thực hành: Học phần Điện toán Đám mây</title>
   <style>
     :root {
       --primary-color: #1e3a8a;
@@ -39,14 +39,14 @@
       border: 1px solid var(--border-color);
       border-radius: 4px;
       box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
-      padding: 60px 70px;
+      padding: 55px 70px;
     }
 
     .academic-header {
       text-align: center;
       border-bottom: 2px solid var(--primary-color);
-      padding-bottom: 25px;
-      margin-bottom: 35px;
+      padding-bottom: 22px;
+      margin-bottom: 30px;
     }
 
     .institution-name {
@@ -55,21 +55,15 @@
       font-weight: 700;
       letter-spacing: 0.05em;
       color: var(--text-muted);
-      margin-bottom: 5px;
+      margin-bottom: 6px;
     }
 
     .report-title {
-      font-size: 1.7rem;
+      font-size: 1.65rem;
       font-weight: 800;
       color: var(--primary-color);
-      margin: 12px 0;
+      margin: 10px 0;
       line-height: 1.35;
-    }
-
-    .report-subtitle {
-      font-size: 1.05rem;
-      color: var(--text-muted);
-      margin-bottom: 15px;
     }
 
     .author-meta {
@@ -80,21 +74,22 @@
       padding: 8px 18px;
       font-size: 0.92rem;
       color: var(--text-main);
+      margin-top: 10px;
     }
 
     .toc-container {
       background: #fafafa;
       border: 1px solid var(--border-color);
       border-left: 4px solid var(--primary-color);
-      padding: 20px 25px;
-      margin: 30px 0 45px;
+      padding: 18px 25px;
+      margin: 25px 0 40px;
       border-radius: 2px;
     }
 
     .toc-title {
       font-size: 1.05rem;
       font-weight: 700;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       color: var(--primary-color);
       text-transform: uppercase;
       letter-spacing: 0.03em;
@@ -106,13 +101,14 @@
     }
 
     .toc-item {
-      margin-bottom: 6px;
+      margin-bottom: 8px;
     }
 
     .toc-item a {
       color: var(--primary-color);
       text-decoration: none;
-      font-size: 0.94rem;
+      font-size: 0.95rem;
+      font-weight: 600;
     }
 
     .toc-item a:hover {
@@ -125,10 +121,25 @@
       margin-top: 4px;
     }
 
+    .toc-sublist li {
+      margin-bottom: 4px;
+    }
+
+    .toc-sublist a {
+      font-weight: 400;
+      font-size: 0.92rem;
+      color: var(--text-main);
+    }
+
+    .lab-divider {
+      border-top: 2px dashed var(--border-color);
+      margin: 50px 0 35px;
+    }
+
     h2 {
       font-size: 1.35rem;
       color: var(--primary-color);
-      margin: 40px 0 16px;
+      margin: 35px 0 16px;
       padding-bottom: 6px;
       border-bottom: 1px solid var(--border-color);
       font-weight: 700;
@@ -137,20 +148,20 @@
     h3 {
       font-size: 1.12rem;
       color: #1e293b;
-      margin: 24px 0 10px;
+      margin: 22px 0 10px;
       font-weight: 600;
     }
 
     p {
       text-align: justify;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
       text-justify: inter-word;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      margin: 20px 0 25px;
+      margin: 18px 0 25px;
       font-size: 0.92rem;
     }
 
@@ -191,7 +202,7 @@
       overflow-x: auto;
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       font-size: 0.88rem;
-      margin: 14px 0 20px;
+      margin: 12px 0 18px;
       line-height: 1.5;
     }
 
@@ -215,7 +226,7 @@
       border: 1px solid var(--border-color);
       border-radius: 4px;
       padding: 14px 18px;
-      margin: 18px 0;
+      margin: 16px 0;
       font-size: 0.92rem;
     }
 
@@ -230,21 +241,8 @@
       text-decoration: underline;
     }
 
-    .reference-list {
-      padding-left: 0;
-      list-style-type: none;
-    }
-
-    .reference-item {
-      padding-left: 2em;
-      text-indent: -2em;
-      margin-bottom: 10px;
-      font-size: 0.9rem;
-      text-align: justify;
-    }
-
     .academic-footer {
-      margin-top: 50px;
+      margin-top: 45px;
       padding-top: 20px;
       border-top: 1px solid var(--border-color);
       text-align: center;
@@ -282,131 +280,138 @@
   <div class="report-wrapper">
     <header class="academic-header">
       <div class="institution-name">Trường Đại học Thủ Dầu Một — Khoa Công nghệ Thông tin</div>
-      <h1 class="report-title">BÁO CÁO THỰC HÀNH CHUYÊN ĐỀ ĐIỆN TOÁN ĐÁM MÂY</h1>
-      <div class="report-subtitle">Khảo sát Ảo hóa, Phân bổ Tài nguyên Container và Mô phỏng Lập lịch Trung tâm Dữ liệu</div>
+      <h1 class="report-title">BÁO CÁO THỰC HÀNH HỌC PHẦN ĐIỆN TOÁN ĐÁM MÂY</h1>
       <div class="author-meta">
-        Học viên thực hiện: <strong>Huỳnh Đăng Khoa</strong> &nbsp;|&nbsp; MSSV: <strong>2324802010254</strong> &nbsp;|&nbsp; Học phần: Điện toán đám mây
+        Sinh viên: <strong>Huỳnh Đăng Khoa</strong> &nbsp;|&nbsp; MSSV: <strong>2324802010254</strong> &nbsp;|&nbsp; Lớp: Điện toán đám mây
       </div>
     </header>
 
     <nav class="toc-container">
-      <div class="toc-title">Mục lục nội dung</div>
+      <div class="toc-title">Mục lục báo cáo</div>
       <ul class="toc-list">
-        <li class="toc-item"><a href="#sec1">1. Khảo sát Đặc tính Điện toán Đám mây và Môi trường Thực thi</a>
+        <li class="toc-item">
+          <a href="#lab1">Bài 1. Lập trình trên Máy ảo Đám mây Đầu tiên</a>
           <ul class="toc-sublist">
-            <li><a href="#sec1-1">1.1. Phân tích năm đặc tính thiết yếu theo chuẩn NIST SP 800-145</a></li>
-            <li><a href="#sec1-2">1.2. Đánh giá thực nghiệm giữa máy trạm cục bộ và máy ảo GitHub Codespaces</a></li>
-            <li><a href="#sec1-3">1.3. Thảo luận các vấn đề kiến trúc hạ tầng đám mây</a></li>
+            <li><a href="#sec1-1">1.1. Bảng so sánh giữa máy tính cá nhân và GitHub Codespaces</a></li>
+            <li><a href="#sec1-2">1.2. Nhận diện năm đặc tính điện toán đám mây theo chuẩn NIST</a></li>
+            <li><a href="#sec1-3">1.3. Thảo luận và trả lời câu hỏi phản biện Bài 1</a></li>
           </ul>
         </li>
-        <li class="toc-item"><a href="#sec2">2. Đóng gói Ứng dụng Bằng Container và Kiểm chứng Giới hạn Tài nguyên</a>
+        <li class="toc-item">
+          <a href="#lab2">Bài 2. Ảo hóa, Container và Mô phỏng Trung tâm Dữ liệu</a>
           <ul class="toc-sublist">
-            <li><a href="#sec2-1">2.1. Cấu hình tệp tin Dockerfile và tối ưu kích thước phân lớp</a></li>
-            <li><a href="#sec2-2">2.2. Kiểm chứng giới hạn tài nguyên tính toán thông qua Linux cgroups</a></li>
-            <li><a href="#sec2-3">2.3. Đối sánh kỹ thuật giữa ảo hóa mức phần cứng và ảo hóa mức hệ điều hành</a></li>
-            <li><a href="#sec2-4">2.4. Phát hành Artifact lên kho lưu trữ GitHub Container Registry</a></li>
+            <li><a href="#sec2-1">2.1. Đóng gói ứng dụng container và phát hành image lên GHCR</a></li>
+            <li><a href="#sec2-2">2.2. Bảng so sánh kỹ thuật giữa máy ảo (Codespaces) và container (Docker)</a></li>
+            <li><a href="#sec2-3">2.3. Bảng kết quả thực nghiệm mô phỏng lập lịch trên CloudSim Plus</a></li>
+            <li><a href="#sec2-4">2.4. Thảo luận và trả lời câu hỏi phản biện Bài 2</a></li>
           </ul>
         </li>
-        <li class="toc-item"><a href="#sec3">3. Mô phỏng Lập lịch Hạ tầng Trung tâm Dữ liệu với CloudSim Plus</a>
-          <ul class="toc-sublist">
-            <li><a href="#sec3-1">3.1. Thiết lập kịch bản mô phỏng và kiến trúc phần cứng</a></li>
-            <li><a href="#sec3-2">3.2. Kết quả thực nghiệm và phân tích tác động của chính sách lập lịch</a></li>
-          </ul>
-        </li>
-        <li class="toc-item"><a href="#sec4">4. Thảo luận Chuyên sâu và Trả lời Câu hỏi Phản biện</a>
-          <ul class="toc-sublist">
-            <li><a href="#sec4-1">4.1. Cơ chế quản lý bộ nhớ cgroups và tác động tới môi trường thực thi ứng dụng</a></li>
-            <li><a href="#sec4-2">4.2. So sánh chính sách lập lịch Time-Shared và Space-Shared dưới góc độ kinh tế đám mây</a></li>
-            <li><a href="#sec4-3">4.3. Giá trị thực tiễn và giới hạn của mô hình mô phỏng trung tâm dữ liệu</a></li>
-          </ul>
-        </li>
-        <li class="toc-item"><a href="#sec5">5. Tài liệu Tham khảo</a></li>
       </ul>
     </nav>
 
-    <!-- CHƯƠNG 1 -->
-    <section id="sec1">
-      <h2>1. Khảo sát Đặc tính Điện toán Đám mây và Môi trường Thực thi</h2>
-      
-      <h3 id="sec1-1">1.1. Phân tích năm đặc tính thiết yếu theo chuẩn NIST SP 800-145</h3>
-      <p>
-        Theo định nghĩa chuẩn của Viện Tiêu chuẩn và Công nghệ Quốc gia Hoa Kỳ (Mell & Grance, 2011), mô hình điện toán đám mây được cấu thành từ năm đặc tính nền tảng. Quá trình triển khai dịch vụ API trên nền tảng GitHub Codespaces minh chứng trực tiếp cho các đặc tính này thông qua các chỉ số đo lường cụ thể:
-      </p>
-      <p>
-        <strong>Dịch vụ tự phục vụ theo yêu cầu (On-demand self-service):</strong> Người dùng khởi tạo môi trường tính toán hoàn chỉnh thông qua giao diện lập trình hoặc cổng thông tin web mà không đòi hỏi sự can thiệp thủ công từ quản trị viên hệ thống. Thời gian cấp phát tài nguyên trung bình đo được đạt xấp xỉ 90 giây.
-      </p>
-      <p>
-        <strong>Khả năng truy cập mạng diện rộng (Broad network access):</strong> Hạ tầng đám mây cho phép truy cập từ các nền tảng khách không đồng nhất (máy tính xách tay, máy trạm di động, trình duyệt web) thông qua giao thức chuẩn HTTPS và cơ chế chuyển tiếp cổng ảo hóa (port forwarding) có định danh tên miền phụ thuộc mạng diện rộng.
-      </p>
-      <p>
-        <strong>Gộp tài nguyên độc lập vị trí (Resource pooling):</strong> Tài nguyên phần cứng vật lý của nhà cung cấp hạ tầng (Microsoft Azure) được hợp nhất để phục vụ đồng thời nhiều người dùng theo mô hình đa thuê bao (multi-tenant). Việc định danh máy chủ thay đổi liên tục qua các chu kỳ tái khởi động phản ánh bản chất phân bổ động từ kho tài nguyên dùng chung.
-      </p>
-      <p>
-        <strong>Độ co giãn nhanh chóng (Rapid elasticity):</strong> Năng lực tính toán có thể được mở rộng hoặc thu hẹp linh hoạt theo nhu cầu thực tế. Cấu hình máy ảo cho phép chuyển đổi từ 2 lõi vi xử lý lên các mức cấu hình cao hơn mà không cần tái cấu trúc mã nguồn ứng dụng.
-      </p>
-      <p>
-        <strong>Dịch vụ đo lường định lượng (Measured service):</strong> Hệ thống tự động kiểm soát và giám sát việc tiêu thụ tài nguyên dựa trên thời gian vận hành vi xử lý (core-hours). Cơ chế này cung cấp tính minh bạch toàn diện cho cả bên cung cấp lẫn bên sử dụng hạ tầng.
-      </p>
+    <!-- ======================================================= -->
+    <!--                       BÀI 1                             -->
+    <!-- ======================================================= -->
+    <section id="lab1">
+      <h2>Bài 1. Lập trình trên Máy ảo Đám mây Đầu tiên</h2>
 
-      <h3 id="sec1-2">1.2. Đánh giá thực nghiệm giữa máy trạm cục bộ và máy ảo GitHub Codespaces</h3>
+      <h3 id="sec1-1">1.1. Bảng so sánh giữa máy tính cá nhân và GitHub Codespaces</h3>
       <p>
-        Thực nghiệm so sánh được tiến hành nhằm xác định sự khác biệt về năng lực vận hành, chi phí khởi tạo và tính khả dụng giữa môi trường vật lý truyền thống và môi trường ảo hóa đám mây.
+        Thực nghiệm đối sánh được thực hiện nhằm định lượng sự khác biệt về quy trình thiết lập, tài nguyên hệ thống, môi trường mạng và mô hình đo lường chi phí giữa máy tính trạm vật lý và máy ảo điện toán đám mây GitHub Codespaces.
       </p>
 
       <table>
-        <caption>Bảng 1. So sánh đặc tính hoạt động giữa máy trạm cục bộ và máy ảo GitHub Codespaces</caption>
+        <caption>Bảng 1. So sánh đặc tính hoạt động giữa máy tính cá nhân và GitHub Codespaces</caption>
         <thead>
           <tr>
-            <th style="width: 25%;">Thông số khảo sát</th>
-            <th style="width: 37%;">Máy trạm cục bộ (Bare-metal)</th>
-            <th style="width: 38%;">Máy ảo đám mây (GitHub Codespaces)</th>
+            <th style="width: 28%;">Tiêu chí đánh giá</th>
+            <th style="width: 36%;">Máy tính cá nhân</th>
+            <th style="width: 36%;">GitHub Codespaces</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>Thời gian thiết lập môi trường</td>
-            <td>~15 phút (Cài đặt thủ công Node.js và các gói phụ thuộc)</td>
-            <td>~90 giây (Khởi tạo tự động từ container image định sẵn)</td>
+            <td>Thời gian từ khi bắt đầu đến khi thực thi được lệnh kiểm tra phiên bản Node.js</td>
+            <td>Xấp xỉ 15 phút (Tải gói cài đặt và cấu hình thủ công biến môi trường hệ thống)</td>
+            <td>Xấp xỉ 90 giây (Khởi tạo tự động từ container image được đóng gói sẵn)</td>
           </tr>
           <tr>
-            <td>Cấu hình phần cứng khả dụng</td>
+            <td>Số lượng vi xử lý và dung lượng bộ nhớ chính ghi nhận từ API</td>
             <td>12 Logical Cores, 16.0 GB RAM vật lý</td>
             <td>2 vCPU Cores, 7.8 GB RAM ảo hóa</td>
           </tr>
           <tr>
-            <td>Nền tảng hệ điều hành</td>
+            <td>Hệ điều hành nền tảng</td>
             <td>Windows 11 Professional (NT Kernel 10.0.26300)</td>
             <td>Linux x86_64 (Kernel 6.8.0-1064-azure)</td>
           </tr>
           <tr>
-            <td>Phương thức phát hành mạng</td>
-            <td>Cấu hình NAT / Port Forwarding nội bộ phức tạp</td>
-            <td>Ánh xạ cổng công khai qua tên miền con TLS tự động</td>
+            <td>Phương thức truy cập dịch vụ từ thiết bị mạng bên ngoài</td>
+            <td>Cấu hình phức tạp qua thiết bị định tuyến (Port Forwarding, DDNS, tường lửa)</td>
+            <td>Chuyển đổi trạng thái cổng sang Public, định tuyến qua tên miền bảo mật TLS tự động</td>
           </tr>
           <tr>
-            <td>Mô hình chi phí và định lượng</td>
-            <td>Chi phí vốn ban đầu (CapEx) cố định, không đo lường</td>
-            <td>Chi phí vận hành (OpEx), định mức 120 core-giờ miễn phí</td>
+            <td>Chi phí vận hành và cơ chế đo lường</td>
+            <td>Chi phí đầu tư phần cứng ban đầu cố định, không tích hợp cơ chế đo lường tự động</td>
+            <td>Mô hình trả tiền theo mức tiêu thụ, định mức 120 core-giờ miễn phí, giám sát qua Billing Usage</td>
           </tr>
         </tbody>
       </table>
 
-      <h3 id="sec1-3">1.3. Thảo luận các vấn đề kiến trúc hạ tầng đám mây</h3>
+      <h3 id="sec1-2">1.2. Nhận diện năm đặc tính điện toán đám mây theo chuẩn NIST</h3>
       <p>
-        Hiện tượng biến đổi giá trị của trường <code>host</code> sau các chu kỳ dừng và khởi động lại dịch vụ được giải thích bởi cơ chế tái cấp phát tài nguyên trong mô hình đa thuê bao. Khi trạng thái dừng được kích hoạt, máy chủ ảo bị giải phóng khỏi nút phần cứng hiện hành để bảo toàn năng lực tính toán cho hệ thống. Ở chu kỳ khởi động tiếp theo, bộ điều phối hạ tầng phân bổ ứng dụng sang một nút vật lý ngẫu nhiên có dung lượng khả dụng, dẫn đến sự thay đổi định danh nút chủ quản.
+        Năm đặc tính cốt lõi của điện toán đám mây được định nghĩa bởi Viện Tiêu chuẩn và Công nghệ Quốc gia Hoa Kỳ (NIST SP 800-145) được phản ánh trực tiếp qua các thao tác thực nghiệm trong bài thực hành:
       </p>
       <p>
-        Về mô hình phân loại dịch vụ, GitHub Codespaces là dạng thức trung gian kết hợp giữa Nền tảng như một Dịch vụ (PaaS) và Hạ tầng như một Dịch vụ (IaaS). Nhà cung cấp chịu trách nhiệm quản lý hoàn toàn tầng ảo hóa phần cứng, hệ điều hành cơ sở và môi trường runtime, trong khi lập trình viên được toàn quyền can thiệp vào tầng không gian người dùng và cấu hình ứng dụng.
+        <strong>1. Tự phục vụ theo yêu cầu (On-demand self-service):</strong> Người dùng tự cấp phát tài nguyên tính toán hoàn chỉnh thông qua thao tác giao diện trên kho lưu trữ GitHub mà không cần có sự can thiệp hay phê duyệt thủ công từ quản trị viên hệ thống. Môi trường phát triển sẵn sàng vận hành trong vòng 90 giây.
+      </p>
+      <p>
+        <strong>2. Khả năng truy cập mạng diện rộng (Broad network access):</strong> Ứng dụng API vận hành trên Codespaces có thể được truy cập đồng thời từ nhiều nền tảng thiết bị khách khác nhau (trình duyệt máy tính, điện thoại thông minh) qua mạng Internet thông qua giao thức truyền tải bảo mật HTTPS.
+      </p>
+      <p>
+        <strong>3. Gộp tài nguyên (Resource pooling):</strong> Hạ tầng máy chủ của nhà cung cấp dịch vụ được gộp thành một kho tài nguyên chung để phục vụ nhiều người dùng theo mô hình đa thuê bao. Việc trường định danh máy chủ thay đổi ngẫu nhiên giữa các lần khởi chạy minh chứng tài nguyên được cấp phát linh hoạt từ pool dùng chung.
+      </p>
+      <p>
+        <strong>4. Co giãn nhanh chóng (Rapid elasticity):</strong> Khả năng mở rộng hoặc thu hẹp cấu hình phần cứng của Codespaces được thực hiện tức thời mà không gây gián đoạn quy trình phát triển. Người dùng có thể nâng cấp từ 2 vCPU lên các cấu hình cao hơn khi yêu cầu tải tăng lên.
+      </p>
+      <p>
+        <strong>5. Dịch vụ đo lường định lượng (Measured service):</strong> Mức độ tiêu thụ tài nguyên của người dùng được kiểm soát và ghi nhận định lượng tự động theo đơn vị core-giờ. Dữ liệu sử dụng được hiển thị minh bạch tại trang quản trị Billing Usage của tài khoản.
+      </p>
+
+      <h3 id="sec1-3">1.3. Thảo luận và trả lời câu hỏi phản biện Bài 1</h3>
+      <p>
+        <strong>Câu hỏi 1: Trường host có thay đổi khi thực hiện Stop rồi Start lại Codespaces không? Điều đó chứng minh điều gì về cơ chế cấp phát tài nguyên?</strong>
+      </p>
+      <p>
+        Trường <code>host</code> thay đổi sau mỗi chu kỳ Stop và Start Codespaces. Khi người dùng kích hoạt trạng thái dừng, máy ảo hoặc container hiện tại được thu hồi hoàn toàn để hoàn trả năng lực tính toán về kho tài nguyên dùng chung. Khi khởi động lại, một máy chủ khả dụng khác trong hệ thống sẽ được phân bổ ngẫu nhiên để phục vụ phiên làm việc mới. Hiện tượng này là minh chứng trực quan cho đặc tính gộp tài nguyên độc lập vị trí của kiến trúc đám mây.
+      </p>
+
+      <p>
+        <strong>Câu hỏi 2: GitHub Codespaces được phân loại là mô hình dịch vụ IaaS, PaaS hay SaaS?</strong>
+      </p>
+      <p>
+        GitHub Codespaces mang bản chất của mô hình Nền tảng như một Dịch vụ (PaaS). Đơn vị cung cấp dịch vụ đảm nhiệm việc quản lý toàn bộ các tầng kiến trúc phức tạp bên dưới bao gồm hạ tầng vật lý, mạng, hệ thống ảo hóa, hệ điều hành Linux cơ sở và môi trường thực thi runtime. Người dùng chỉ tập trung vào phát triển ứng dụng và cấu hình mã nguồn. Tuy nhiên, việc cung cấp quyền truy cập dòng lệnh cấp root giúp người dùng có khả năng can thiệp sâu vào môi trường phát triển tương tự như mô hình IaaS.
+      </p>
+
+      <p>
+        <strong>Câu hỏi 3: Hai hạn chế của phương thức thiết lập môi trường truyền thống và một rủi ro nảy sinh khi chuyển dịch sang đám mây?</strong>
+      </p>
+      <p>
+        Hai hạn chế lớn của phương thức thiết lập truyền thống trên máy tính phòng thực hành bao gồm: thứ nhất là thời gian triển khai kéo dài và tiềm ẩn nguy cơ xung đột phiên bản phần mềm giữa các máy trạm; thứ hai là tính linh hoạt thấp do môi trường bị ràng buộc cứng vào phần cứng vật lý tại chỗ. Ngược lại, rủi ro mới phát sinh từ mô hình đám mây là sự phụ thuộc hoàn toàn vào đường truyền kết nối mạng Internet và nguy cơ vượt hạn mức chi phí vận hành nếu không quản trị chặt chẽ thời gian hoạt động của máy ảo.
       </p>
     </section>
 
-    <!-- CHƯƠNG 2 -->
-    <section id="sec2">
-      <h2>2. Đóng gói Ứng dụng Bằng Container và Kiểm chứng Giới hạn Tài nguyên</h2>
+    <div class="lab-divider"></div>
 
-      <h3 id="sec2-1">2.1. Cấu hình tệp tin Dockerfile và tối ưu kích thước phân lớp</h3>
+    <!-- ======================================================= -->
+    <!--                       BÀI 2                             -->
+    <!-- ======================================================= -->
+    <section id="lab2">
+      <h2>Bài 2. Ảo hóa, Container và Mô phỏng Trung tâm Dữ liệu</h2>
+
+      <h3 id="sec2-1">2.1. Đóng gói ứng dụng container và phát hành image lên GHCR</h3>
       <p>
-        Ứng dụng được đóng gói thành container image theo nguyên tắc phân lớp tối thiểu hóa bề mặt tấn công. Việc lựa chọn bản phân phối <code>node:22-alpine</code> giúp giảm thiểu dung lượng image cơ sở xuống dưới 150 MB. Quy trình thực thi sử dụng cờ <code>npm ci --omit=dev</code> để bảo đảm tính tất định của các gói thư viện và loại bỏ hoàn toàn các gói phát triển không cần thiết cho môi trường vận hành.
+        Ứng dụng được đóng gói thành container image độc lập thông qua tệp tin cấu hình <code>Dockerfile</code> tối ưu, dựa trên bản phân phối nhẹ <code>node:22-alpine</code> và thực thi dưới quyền tài khoản người dùng không đặc quyền <code>node</code>:
       </p>
 
       <pre><code>FROM node:22-alpine
@@ -424,78 +429,53 @@ CMD ["node", "src/server.js"]</code></pre>
 .git
 docs</code></pre>
 
-      <h3 id="sec2-2">2.2. Kiểm chứng giới hạn tài nguyên tính toán thông qua Linux cgroups</h3>
-      <p>
-        Thực nghiệm khởi chạy đồng thời hai phiên bản container: phiên bản <code>notes1</code> vận hành không áp đặt trần tài nguyên và phiên bản <code>notes2</code> bị giới hạn ở mức 0.5 vCPU cùng 128 MB RAM bằng các tham số dòng lệnh tương ứng:
-      </p>
-      <pre><code>docker run -d --name notes1 -p 3000:3000 notes-api:1.0
-docker run -d --name notes2 -p 3001:3000 --cpus=0.5 --memory=128m notes-api:1.0</code></pre>
+      <div class="metadata-block">
+        Định danh image trên GitHub Container Registry: <code>ghcr.io/imkhoaformrbys/notes-api:1.0</code><br>
+        Liên kết kho lưu trữ package công khai: <a href="https://github.com/users/imkhoaformrbys/packages/container/package/notes-api" target="_blank">https://github.com/users/imkhoaformrbys/packages/container/package/notes-api</a><br>
+        Lệnh tải và triển khai trực tiếp: <code>docker pull ghcr.io/imkhoaformrbys/notes-api:1.0</code>
+      </div>
 
+      <h3 id="sec2-2">2.2. Bảng so sánh kỹ thuật giữa máy ảo (Codespaces) và container (Docker)</h3>
       <p>
-        Kết quả kiểm vấn API qua giao thức HTTP trả về thông số tài nguyên giống nhau tại cả hai phiên bản container, với số lượng CPU và dung lượng RAM phản ánh thông số phần cứng của máy chủ host. Nguyên nhân bắt nguồn từ việc các hàm thư viện chuẩn của Node.js (<code>os.cpus()</code>, <code>os.totalmem()</code>) thực hiện việc đọc dữ liệu từ hệ thống tệp ảo <code>/proc/cpuinfo</code> và <code>/proc/meminfo</code> của nhân Linux dùng chung. Trong khi đó, việc áp đặt ngưỡng tài nguyên được quản lý độc lập tại tầng nhân thông qua hệ thống phân tầng nhóm kiểm soát (Control Groups - cgroups). Lệnh giám sát <code>docker stats --no-stream</code> ghi nhận chính xác giới hạn ngưỡng 128 MiB áp dụng cho phiên bản <code>notes2</code>.
-      </p>
-
-      <h3 id="sec2-3">2.3. Đối sánh kỹ thuật giữa ảo hóa mức phần cứng và ảo hóa mức hệ điều hành</h3>
-      <p>
-        Sự khác biệt bản chất giữa ảo hóa phần cứng (Virtual Machine) và ảo hóa hệ điều hành (Container) được tổng hợp qua các chỉ số đo đạc thực nghiệm tại Bảng 2.
+        Sự khác biệt căn bản giữa ảo hóa mức phần cứng (Hardware-level Virtualization) và ảo hóa mức hệ điều hành (Operating System-level Virtualization) được xác thực qua các chỉ số đo đạc thực nghiệm.
       </p>
 
       <table>
-        <caption>Bảng 2. So sánh kỹ thuật giữa ảo hóa mức máy (Codespaces) và container (Docker)</caption>
+        <caption>Bảng 2. So sánh kỹ thuật giữa máy ảo (Codespaces) và container (Docker)</caption>
         <thead>
           <tr>
             <th style="width: 25%;">Tiêu chí kỹ thuật</th>
-            <th style="width: 37%;">Máy ảo phần cứng (Codespaces VM)</th>
-            <th style="width: 38%;">Container tiến trình (Docker notes2)</th>
+            <th style="width: 37%;">Máy ảo Codespaces (Virtual Machine)</th>
+            <th style="width: 38%;">Container notes2 (Docker Container)</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>Thời gian khởi tạo</td>
-            <td>~45 – 90 giây (Khởi động hệ điều hành khách)</td>
-            <td>~0.5 – 0.8 giây (Khởi tạo không gian tiến trình cô lập)</td>
+            <td>Thời gian khởi động hoàn chỉnh</td>
+            <td>45 – 90 giây (Khởi tạo toàn bộ kernel và các dịch vụ hệ thống)</td>
+            <td>0.5 – 0.8 giây (Đo bằng lệnh <code>time docker run --rm notes-api:1.0 node -e "1"</code>)</td>
           </tr>
           <tr>
-            <td>Dung lượng lưu trữ đĩa</td>
-            <td>15 GB – 32 GB hạn mức ổ đĩa ảo hóa</td>
-            <td>~150 MB (Toàn bộ tầng lưu trữ ứng dụng)</td>
+            <td>Kích thước không gian lưu trữ</td>
+            <td>Hạn mức đĩa ảo hóa từ 15 GB đến 32 GB</td>
+            <td>Xấp xỉ 150 MB ghi nhận từ cột SIZE của <code>docker images</code></td>
           </tr>
           <tr>
-            <td>Cấu trúc nhân hệ điều hành</td>
-            <td>Nhân độc lập phân bổ qua Hypervisor</td>
-            <td>Chia sẻ trực tiếp nhân Linux với máy chủ host</td>
+            <td>Kiến trúc nhân hệ điều hành</td>
+            <td>Nhân hệ điều hành riêng biệt do Hypervisor phân bổ</td>
+            <td>Dùng chung nhân Linux với máy chủ host (<code>uname -r</code> trả về đồng nhất)</td>
           </tr>
           <tr>
-            <td>Cơ chế cách ly an toàn</td>
-            <td>Cách ly phần cứng thông qua Hypervisor Type-1/2</td>
-            <td>Cách ly logic bằng Linux Namespaces và cgroups</td>
+            <td>Mức độ cô lập tài nguyên</td>
+            <td>Cô lập mức phần cứng thông qua Hypervisor Type-1 hoặc Type-2</td>
+            <td>Cô lập mức không gian tiến trình thông qua Linux Namespaces và cgroups</td>
           </tr>
         </tbody>
       </table>
 
-      <h3 id="sec2-4">2.4. Phát hành Artifact lên kho lưu trữ GitHub Container Registry</h3>
+      <h3 id="sec2-3">2.3. Bảng kết quả thực nghiệm mô phỏng lập lịch trên CloudSim Plus</h3>
       <p>
-        Image container đã được ký xác thực và phát hành công khai trên kho lưu trữ GitHub Container Registry (GHCR) theo định danh tiêu chuẩn:
-      </p>
-      <div class="metadata-block">
-        Mã định danh Artifact: <code>ghcr.io/imkhoaformrbys/notes-api:1.0</code><br>
-        Liên kết truy cập công khai: <a href="https://github.com/users/imkhoaformrbys/packages/container/package/notes-api" target="_blank">https://github.com/users/imkhoaformrbys/packages/container/package/notes-api</a><br>
-        Lệnh kéo và triển khai độc lập: <code>docker pull ghcr.io/imkhoaformrbys/notes-api:1.0</code>
-      </div>
-    </section>
-
-    <!-- CHƯƠNG 3 -->
-    <section id="sec3">
-      <h2>3. Mô phỏng Lập lịch Hạ tầng Trung tâm Dữ liệu với CloudSim Plus</h2>
-
-      <h3 id="sec3-1">3.1. Thiết lập kịch bản mô phỏng và kiến trúc phần cứng</h3>
-      <p>
-        Thực nghiệm mô phỏng trung tâm dữ liệu được xây dựng trên framework CloudSim Plus (Silva Filho et al., 2017) thông qua việc cấu hình lớp <code>BasicFirstExample</code>. Hạ tầng vật lý gồm một trạm chủ (Host) tích hợp 8 phần tử xử lý (Processing Elements - PEs) đạt năng lực tính toán 1000 MIPS trên mỗi PE. Cấu hình mặc định triển khai 2 máy ảo (mỗi máy ảo yêu cầu 4 PEs) và 4 tác vụ tính toán (Cloudlets, mỗi tác vụ yêu cầu 2 PEs với độ dài xử lý 10,000 MI).
-      </p>
-
-      <h3 id="sec3-2">3.2. Kết quả thực nghiệm và phân tích tác động của chính sách lập lịch</h3>
-      <p>
-        Bốn kịch bản thực nghiệm độc lập được tiến hành nhằm phân tích mối quan hệ giữa quy mô tài nguyên, khối lượng tải và thuật toán điều phối tác vụ. Các số liệu được đo lường thực tế và ghi nhận tại Bảng 3.
+        Kịch bản mô phỏng hạ tầng trung tâm dữ liệu được triển khai trên nền tảng CloudSim Plus với cấu hình hạ tầng cơ sở gồm một máy chủ vật lý Host (8 Processing Elements - PEs, năng lực 1000 MIPS trên mỗi PE), 2 máy ảo (mỗi máy ảo yêu cầu 4 PEs) và các tác vụ tính toán Cloudlets (yêu cầu 2 PEs, độ dài 10,000 MI). Số liệu thu thập từ các lần chạy thực nghiệm được tổng hợp chi tiết tại Bảng 3.
       </p>
 
       <table>
@@ -503,115 +483,74 @@ docker run -d --name notes2 -p 3001:3000 --cpus=0.5 --memory=128m notes-api:1.0<
         <thead>
           <tr>
             <th style="width: 10%;">Lần</th>
-            <th style="width: 32%;">Thông số can thiệp</th>
-            <th style="width: 25%;">Thời điểm hoàn thành (s)</th>
-            <th style="width: 33%;">Đặc tính vận hành và phân tích cơ chế</th>
+            <th style="width: 30%;">Thông số thay đổi</th>
+            <th style="width: 26%;">Thời điểm hoàn thành (s)</th>
+            <th style="width: 34%;">Đặc tính vận hành và phân tích cơ chế</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td><strong>0</strong></td>
-            <td>Cấu hình cơ sở (Mặc định)</td>
+            <td>Cấu hình gốc mặc định</td>
             <td><strong>20.1 giây</strong></td>
-            <td>Tài nguyên phần cứng đáp ứng đủ yêu cầu của 2 máy ảo. Bốn tác vụ được chia đều cho 2 VM và thực thi song song từ thời điểm 0.1s. Thời gian thực thi kéo dài 20.0s do hệ số sử dụng tài nguyên được quy định ở mức 50% (UtilizationModelDynamic = 0.5).</td>
+            <td>Máy chủ đáp ứng đủ 8 lõi cho 2 máy ảo. Bốn tác vụ được phân bổ đều cho 2 VM và thực thi song song từ thời điểm 0.1s. Thời gian chạy thực tế kéo dài 20.0s do hệ số sử dụng tài nguyên được ấn định ở mức 50% (UtilizationModelDynamic = 0.5).</td>
           </tr>
           <tr>
             <td><strong>1</strong></td>
-            <td>Nhân đôi máy ảo (VMS = 4)</td>
+            <td>Nhân đôi số lượng máy ảo (VMS = 4)</td>
             <td><strong>20.1 giây</strong></td>
-            <td>Tổng số lõi yêu cầu từ 4 máy ảo (16 PEs) vượt quá năng lực vật lý của máy chủ (8 PEs). Hệ thống từ chối khởi tạo VM 2 và VM 3. Bốn tác vụ tiếp tục được điều phối thực thi trên hai máy ảo hợp lệ và hoàn tất tại mốc 20.1s.</td>
+            <td>Tổng số lõi yêu cầu từ 4 máy ảo (16 PEs) vượt quá năng lực vật lý của Host (8 PEs). Hệ thống ghi nhận cảnh báo và từ chối khởi tạo VM 2 và VM 3. Bốn tác vụ tiếp tục được điều phối thực thi trên hai máy ảo hoạt động bình thường.</td>
           </tr>
           <tr>
             <td><strong>2</strong></td>
-            <td>Nhân đôi tác vụ (CLOUDLETS = 8)</td>
+            <td>Nhân đôi số lượng tác vụ (CLOUDLETS = 8)</td>
             <td><strong>65.7 giây</strong></td>
-            <td>Mỗi máy ảo tiếp nhận 4 tác vụ đồng thời. Chính sách lập lịch mặc định chia sẻ thời gian (Time-Shared) thực hiện phân chia lát cắt vi xử lý cho toàn bộ các tác vụ, dẫn đến hiện tượng suy giảm hiệu năng cá thể và kéo dài tổng thời gian hoàn tất tác vụ cuối cùng lên 65.7s.</td>
+            <td>Mỗi máy ảo tiếp nhận 4 tác vụ đồng thời. Chính sách lập lịch mặc định chia sẻ thời gian (Time-Shared) thực hiện phân chia lát cắt CPU cho tất cả tác vụ, dẫn đến suy giảm tốc độ xử lý của từng tác vụ và kéo dài thời gian hoàn thành.</td>
           </tr>
           <tr>
             <td><strong>3</strong></td>
             <td>Chuyển đổi bộ lập lịch sang Space-Shared</td>
             <td><strong>40.3 giây</strong></td>
-            <td>Chính sách chia sẻ không gian (Space-Shared) cấp phát độc quyền lõi xử lý cho tác vụ theo thứ tự đến trước (FIFO). Nhóm tác vụ 0, 2, 1, 3 hoàn tất sớm tại mốc 20.1s; nhóm tác vụ 4, 6, 5, 7 giải phóng khỏi hàng đợi và kết thúc tại 40.3s.</td>
+            <td>Chính sách chia sẻ không gian (Space-Shared) cấp phát độc quyền lõi xử lý theo hàng đợi FIFO. Nhóm tác vụ 0, 2, 1, 3 hoàn thành sớm ở mốc 20.1s; nhóm tác vụ 4, 6, 5, 7 bắt đầu tại 20.2s sau khi nhận lõi giải phóng và kết thúc tại 40.3s.</td>
           </tr>
         </tbody>
       </table>
-    </section>
 
-    <!-- CHƯƠNG 4 -->
-    <section id="sec4">
-      <h2>4. Thảo luận Chuyên sâu và Trả lời Câu hỏi Phản biện</h2>
-
-      <h3 id="sec4-1">4.1. Cơ chế quản lý bộ nhớ cgroups và tác động tới môi trường thực thi ứng dụng</h3>
+      <h3 id="sec2-4">2.4. Thảo luận và trả lời câu hỏi phản biện Bài 2</h3>
       <p>
-        Hiện tượng ứng dụng Node.js trong container <code>notes2</code> báo cáo dung lượng bộ nhớ khả dụng tương đương cấu hình máy trạm xuất phát từ kiến trúc cách ly của Linux container. Container không mô phỏng phần cứng độc lập mà thực thi như một tiến trình bình thường trong không gian tên (namespace) được cách ly logic. Thư viện chuẩn hệ thống thực hiện truy vấn tổng dung lượng bộ nhớ thông qua tệp tin ảo <code>/proc/meminfo</code>, vốn chỉ phản ánh thông số vật lý của toàn bộ nút chủ quản. Trong khi đó, trần phân bổ tài nguyên 128 MB do cgroups kiểm soát tại phân tầng <code>/sys/fs/cgroup/memory</code>.
+        <strong>Câu hỏi 1: Vì sao API trong container notes2 vẫn báo dung lượng memoryGB bằng RAM máy chủ dù đã áp đặt giới hạn 128 MB? Ứng dụng Node.js hoặc Java chạy trong container cần cấu hình những gì để tránh sự cố?</strong>
       </p>
       <p>
-        Đặc tính kỹ thuật này đòi hỏi sự lưu ý đặc biệt trong quá trình cấu hình môi trường vận hành thực tế cho ứng dụng:
+        Container không ảo hóa không gian phần cứng riêng mà hoạt động như các tiến trình được cô lập trên nhân hệ điều hành máy chủ. Hàm <code>os.totalmem()</code> của Node.js thực hiện truy vấn thông tin bộ nhớ từ tập tin ảo <code>/proc/meminfo</code> của Linux kernel, nơi chỉ phản ánh tổng dung lượng bộ nhớ vật lý của toàn bộ máy chủ chủ quản. Trong khi đó, giới hạn bộ nhớ <code>--memory=128m</code> được kiểm soát độc lập tại phân tầng nhóm kiểm soát <code>/sys/fs/cgroup/memory</code> của Linux cgroups.
       </p>
       <p>
-        Đối với môi trường thực thi Node.js, bộ thu gom rác (Garbage Collector) của V8 Engine xác định kích thước heap mặc định dựa trên thông số bộ nhớ vật lý của hệ thống (thường chiếm từ 1.4 GB đến 2.0 GB trên máy chủ 8 GB). Nếu ứng dụng xử lý lưu lượng dữ liệu tăng đột biến mà không được giới hạn dung lượng heap, bộ nhớ tiêu thụ sẽ nhanh chóng vượt ngưỡng 128 MB của container. Khi đó, nhân Linux sẽ kích hoạt cơ chế Out-Of-Memory Killer (OOM Killer) để chấm dứt tiến trình ngay lập tức với mã thoát 137. Để ngăn ngừa sự cố, cấu hình khởi chạy bắt buộc phải thiết lập tham số heap tối đa tương thích, ví dụ: <code>node --max-old-space-size=96 src/server.js</code> nhằm đảm bảo hạn mức an toàn cho không gian bộ nhớ ngăn xếp và tiến trình phụ trợ.
-      </p>
-      <p>
-        Đối với môi trường thực thi Java Virtual Machine (JVM), các phiên bản cũ trước Java 8u191 không sở hữu cơ chế nhận biết cgroups, dẫn đến việc JVM tự động cấp phát Max Heap Size tương đương 25% dung lượng RAM máy chủ vật lý, gây lỗi OOMKilled ngay từ giai đoạn nạp tiến trình. Do đó, hạ tầng container hóa hiện đại bắt buộc phải triển khai trên các phiên bản JDK có hỗ trợ cgroups hoàn chỉnh cùng việc kích hoạt tường minh các tham số <code>-XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0</code>.
+        Đối với Node.js, V8 Engine mặc định tự động cấp phát kích thước heap dựa trên tổng RAM máy chủ (có thể lên tới 1.5 - 2 GB). Khi ứng dụng vận hành trong container giới hạn 128 MB, nếu bộ nhớ heap tăng vượt ngưỡng quy định, nhân Linux sẽ kích hoạt cơ chế Out-Of-Memory Killer (OOM Killer) để hủy tiến trình ngay lập tức với mã lỗi 137. Do đó, tiến trình Node.js bắt buộc phải được khởi chạy với cờ giới hạn không gian heap tối đa, ví dụ: <code>node --max-old-space-size=96 src/server.js</code>. Tương tự đối với Java Virtual Machine (JVM), các ứng dụng cần chạy trên phiên bản JDK có hỗ trợ cgroups nhận biết container và kích hoạt các cờ cấu hình tường minh như <code>-XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0</code> hoặc <code>-Xmx96m</code>.
       </p>
 
-      <h3 id="sec4-2">4.2. So sánh chính sách lập lịch Time-Shared và Space-Shared dưới góc độ kinh tế đám mây</h3>
       <p>
-        Kết quả thực nghiệm tại Lần 3 làm sáng tỏ sự khác biệt căn bản giữa hai mô hình điều phối tài nguyên vi xử lý:
+        <strong>Câu hỏi 2: Phân tích sự khác biệt giữa hai chính sách lập lịch Time-Shared và Space-Shared qua kết quả Lần 3? Một nhà cung cấp dịch vụ đám mây định hướng thị trường sẽ lựa chọn chính sách nào cho phân khúc gói dịch vụ giá rẻ, vì sao?</strong>
       </p>
       <p>
-        Chính sách chia sẻ thời gian (Time-Shared) chia nhỏ chu kỳ xử lý của CPU để phục vụ đồng thời toàn bộ các tiến trình đang hoạt động. Khi mật độ tác vụ vượt quá số lượng lõi vật lý, không có tác vụ nào bị chặn trong hàng đợi, nhưng tốc độ xử lý của từng tác vụ đều suy giảm tỷ lệ nghịch với số lượng yêu cầu đồng thời. Toàn bộ các tác vụ đều chịu ảnh hưởng trễ và hoàn tất muộn. Ngược lại, chính sách chia sẻ không gian (Space-Shared) cấp phát độc quyền năng lực tính toán cho tiến trình cho đến khi hoàn thành. Ưu điểm nổi bật của mô hình này là loại bỏ hoàn toàn hiện tượng suy giảm hiệu năng do chuyển đổi ngữ cảnh (context switching), giúp một nửa số tác vụ hoàn thành sớm hơn đáng kể và tối ưu hóa thời gian phản hồi trung bình (average response time).
+        Chính sách Time-Shared phân chia chu kỳ thời gian xử lý của CPU đồng thời cho tất cả các tác vụ đang chờ. Khi khối lượng tác vụ tăng cao, toàn bộ các tác vụ đều bị suy giảm tốc độ xử lý và cùng hoàn thành muộn. Ngược lại, chính sách Space-Shared phân bổ độc quyền lõi xử lý cho tác vụ theo nguyên tắc đến trước được phục vụ trước (FIFO). Tác vụ đang chạy đạt công suất tính toán tối đa, giúp một nhóm tác vụ hoàn tất sớm hơn đáng kể và tối ưu hóa thời gian phản hồi trung bình.
       </p>
       <p>
-        Đối với phân khúc dịch vụ điện toán đám mây giá rẻ (budget cloud hosting), nhà cung cấp định hướng thị trường sẽ ưu tiên lựa chọn chính sách Time-Shared kết hợp cùng kỹ thuật bán vượt mức tài nguyên (resource overcommitment / overselling). Quyết định này được chi phối bởi hai luận điểm kinh tế kỹ thuật:
-      </p>
-      <p>
-        Thứ nhất, tối đa hóa doanh thu từ việc gộp tài nguyên (Resource Pooling). Hầu hết các ứng dụng phổ thông chỉ sử dụng vi xử lý ở mức tải thấp và mang tính ngắt quãng. Cơ chế Time-Shared cho phép nhà cung cấp phát hành số lượng vCPU lớn hơn nhiều so với năng lực vật lý thực có, tương tự mô hình máy ảo burstable (như dòng EC2 T-series của AWS).
-      </p>
-      <p>
-        Thứ hai, đảm bảo tính liên tục của trải nghiệm người dùng. Với Space-Shared, khi cạn kiệt tài nguyên lõi, yêu cầu từ khách hàng sẽ bị từ chối hoặc kẹt vô thời hạn trong hàng đợi. Việc sử dụng Time-Shared đảm bảo mọi yêu cầu đều được hệ thống tiếp nhận và phản hồi tức thời dù tốc độ có thể chậm hơn đôi chút trong giai đoạn cao điểm, hoàn toàn tương thích với cam kết chất lượng dịch vụ nỗ lực tối đa (best-effort service) của phân khúc giá thấp.
+        Đối với phân khúc dịch vụ giá rẻ, nhà cung cấp điện toán đám mây sẽ ưu tiên lựa chọn chính sách Time-Shared kết hợp cùng kỹ thuật phân bổ vượt mức tài nguyên (Resource Overcommitment / Overselling). Lựa chọn này xuất phát từ hai lý do chính: thứ nhất là khả năng tối đa hóa doanh thu từ việc gộp tài nguyên, cho phép phát hành số lượng vCPU lớn hơn năng lực vật lý thực tế do phần lớn tác vụ phổ thông không tiêu thụ 100% CPU liên tục; thứ hai là đảm bảo khả năng tiếp nhận yêu cầu liên tục, tránh việc từ chối dịch vụ hoặc để yêu cầu của khách hàng bị gián đoạn trong hàng đợi kéo dài, phù hợp với tiêu chuẩn cam kết nỗ lực tối đa (best-effort service).
       </p>
 
-      <h3 id="sec4-3">4.3. Giá trị thực tiễn và giới hạn của mô hình mô phỏng trung tâm dữ liệu</h3>
       <p>
-        Công cụ mô phỏng như CloudSim Plus đóng vai trò nền tảng trong quá trình tiền khả thi trước khi tiến hành thuê mướn hoặc xây dựng hạ tầng phần cứng thực tế. Công cụ cho phép kiến trúc sư hệ thống đánh giá nhanh chóng hàng trăm kịch bản phân bổ máy ảo, kiểm chứng tính khả thi của các giải thuật lập lịch và xác định giới hạn tới hạn của trung tâm dữ liệu mà không phát sinh chi phí vận hành hay rủi ro gián đoạn dịch vụ thực.
+        <strong>Câu hỏi 3: Việc mô phỏng trung tâm dữ liệu mang lại giá trị gì trước khi quyết định thuê mướn hạ tầng phần cứng thực tế, và kết quả mô phỏng có thể xuất hiện sai lệch so với thực tế ở những khía cạnh nào?</strong>
       </p>
       <p>
-        Tuy nhiên, giữa kết quả mô phỏng và môi trường vận hành thực tế luôn tồn tại các độ sai lệch hệ thống cần được cân nhắc:
+        Mô phỏng giúp đơn vị phát triển đánh giá nhanh chóng và chính xác hiệu quả vận hành của nhiều kiến trúc hạ tầng và thuật toán lập lịch khác nhau mà không phát sinh chi phí tài chính thuê máy chủ thật. Đồng thời, mô phỏng cho phép thử nghiệm an toàn các tình huống tải tới hạn hoặc sự cố thảm họa mà không gây rủi ro gián đoạn dịch vụ thực tế.
       </p>
       <p>
-        Một là, sự lý tưởng hóa mô hình năng lực tính toán. Mô phỏng quy ước hiệu năng xử lý thông qua một chỉ số MIPS cố định, trong khi trên phần cứng thực, năng lực CPU biến thiên liên tục theo kiến trúc tập lệnh, phân cấp bộ nhớ đệm (L1/L2/L3 cache), băng thông kênh nhớ và hiện tượng điều tiết xung nhịp do nhiệt độ (thermal throttling).
+        Mặc dù vậy, kết quả mô phỏng luôn tồn tại các sai lệch so với thực tế do: thứ nhất, mô hình phần cứng bị lý tưởng hóa qua chỉ số MIPS cố định mà không phản ánh được sự biến thiên do kiến trúc vi xử lý, bộ nhớ đệm cache hoặc hiện tượng điều tiết xung nhịp vì nhiệt độ; thứ hai, mô phỏng bỏ qua các đặc tính bất định của hạ tầng mạng và lưu trữ như độ trễ biến thiên, hiện tượng mất gói tin và tắc nghẽn I/O đĩa; thứ ba, mô phỏng không tính toán toàn diện các chi phí hao phí ảo hóa nảy sinh từ việc chuyển đổi ngữ cảnh liên tục của hệ điều hành và sự tranh chấp tài nguyên vật lý giữa các máy ảo trên cùng một nút mạng.
       </p>
-      <p>
-        Hai là, sự bất định của hệ thống mạng và lưu trữ vào/ra (I/O). Các môi trường thực tế luôn chịu ảnh hưởng bởi độ trễ phân tán (jitter), hiện tượng suy hao gói tin, tắc nghẽn chuyển mạch và độ trễ ngẫu nhiên của ổ đĩa, những yếu tố thường được đơn giản hóa thành các hàm toán học trong mô hình mô phỏng.
-      </p>
-      <p>
-        Ba là, hao phí ảo hóa (Virtualization overhead). Hao phí chuyển đổi ngữ cảnh của nhân hệ điều hành, năng lực tiêu tốn cho việc giám sát của Hypervisor và hiện tượng tranh chấp tài nguyên phần cứng giữa các container/VM chạy trên cùng nút vật lý là các biến số phức tạp không thể được phản ánh trọn vẹn trong các công thức mô phỏng tất định.
-      </p>
-    </section>
-
-    <!-- TÀI LIỆU THAM KHẢO -->
-    <section id="sec5">
-      <h2>5. Tài liệu Tham khảo</h2>
-      <ul class="reference-list">
-        <li class="reference-item">
-          Mell, P., & Grance, T. (2011). <em>The NIST definition of cloud computing</em> (Special Publication 800-145). National Institute of Standards and Technology. https://doi.org/10.6028/NIST.SP.800-145
-        </li>
-        <li class="reference-item">
-          Menage, P. B. (2007). Adding generic process containers to the Linux kernel. <em>Proceedings of the Linux Symposium</em>, 2, 45–57.
-        </li>
-        <li class="reference-item">
-          Merkel, D. (2014). Docker: Lightweight Linux containers for consistent development and deployment. <em>Linux Journal</em>, 2014(239), Article 2.
-        </li>
-        <li class="reference-item">
-          Silva Filho, M. C., Oliveira, R. L., Monteiro, C. C., Inácio, P. R., & Freire, M. M. (2017). CloudSim Plus: A modern Java 8 framework for modeling and simulation of cloud computing infrastructures. <em>Software: Practice and Experience</em>, 47(9), 1309–1334. https://doi.org/10.1002/spe.2466
-        </li>
-      </ul>
     </section>
 
     <footer class="academic-footer">
       <div>Báo cáo Thực hành Học phần Điện toán Đám mây — Niên khóa 2026–2027</div>
-      <div>Trường Đại học Thủ Dầu Một (TDMU)</div>
+      <div>Khoa Công nghệ Thông tin — Trường Đại học Thủ Dầu Một (TDMU)</div>
     </footer>
   </div>
 </body>
