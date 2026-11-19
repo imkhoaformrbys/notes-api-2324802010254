@@ -9,25 +9,28 @@ const upload = multer({
   limits: { fileSize: 2 * 1024 * 1024 }
 });
 
-router.get('/', async (req, res) => {
+const wrap = (handler) => (req, res, next) =>
+  Promise.resolve(handler(req, res, next)).catch(next);
+
+router.get('/', wrap(async (req, res) => {
   const filter = req.query.tag ? { tags: String(req.query.tag) } : {};
   const notes = await Note.find(filter).sort({ createdAt: -1 }).limit(50);
   res.json(notes);
-});
+}));
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', wrap(async (req, res) => {
   const note = await Note.findById(req.params.id);
   if (!note) return res.status(404).json({ error: 'Không tìm thấy ghi chú' });
   res.json(note);
-});
+}));
 
-router.post('/', async (req, res) => {
+router.post('/', wrap(async (req, res) => {
   const { title, content, tags } = req.body ?? {};
   const note = await Note.create({ title, content, tags });
   res.status(201).json(note);
-});
+}));
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', wrap(async (req, res) => {
   const { title, content, tags } = req.body ?? {};
   const note = await Note.findByIdAndUpdate(
     req.params.id,
@@ -36,15 +39,15 @@ router.put('/:id', async (req, res) => {
   );
   if (!note) return res.status(404).json({ error: 'Không tìm thấy ghi chú' });
   res.json(note);
-});
+}));
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', wrap(async (req, res) => {
   const note = await Note.findByIdAndDelete(req.params.id);
   if (!note) return res.status(404).json({ error: 'Không tìm thấy ghi chú' });
   res.status(204).end();
-});
+}));
 
-router.post('/:id/attachment', upload.single('file'), async (req, res) => {
+router.post('/:id/attachment', upload.single('file'), wrap(async (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'Thiếu tệp ở trường "file"' });
   const note = await Note.findById(req.params.id);
   if (!note) return res.status(404).json({ error: 'Không tìm thấy ghi chú' });
@@ -59,6 +62,18 @@ router.post('/:id/attachment', upload.single('file'), async (req, res) => {
   note.attachmentUrl = bucket().getPublicUrl(path).data.publicUrl;
   await note.save();
   res.json(note);
+}));
+
+router.use((err, req, res, next) => {
+  if (
+    err.name === 'ValidationError' ||
+    err.name === 'CastError' ||
+    err instanceof multer.MulterError
+  ) {
+    return res.status(400).json({ error: err.message });
+  }
+  console.error(err);
+  res.status(500).json({ error: 'Lỗi máy chủ' });
 });
 
 module.exports = router;
