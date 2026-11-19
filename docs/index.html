@@ -306,6 +306,15 @@
             <li><a href="#sec2-4">2.4. Thảo luận và trả lời câu hỏi phản biện Bài 2</a></li>
           </ul>
         </li>
+        <li class="toc-item">
+          <a href="#lab3">Bài 3. Lưu trữ Phân tán: NoSQL và Lưu trữ Đối tượng</a>
+          <ul class="toc-sublist">
+            <li><a href="#sec3-1">3.1. Kiến trúc lưu trữ và API CRUD tích hợp cơ sở dữ liệu NoSQL</a></li>
+            <li><a href="#sec3-2">3.2. Bảng đo hiệu quả chỉ mục trên bộ sưu tập 2.000 tài liệu</a></li>
+            <li><a href="#sec3-3">3.3. So sánh mô hình nhân bản: Atlas Replica Set và HDFS</a></li>
+            <li><a href="#sec3-4">3.4. Thảo luận và trả lời câu hỏi phản biện Bài 3</a></li>
+          </ul>
+        </li>
       </ul>
     </nav>
 
@@ -545,6 +554,129 @@ docs</code></pre>
       </p>
       <p>
         Mặc dù vậy, kết quả mô phỏng luôn tồn tại các sai lệch so với thực tế do: thứ nhất, mô hình phần cứng bị lý tưởng hóa qua chỉ số MIPS cố định mà không phản ánh được sự biến thiên do kiến trúc vi xử lý, bộ nhớ đệm cache hoặc hiện tượng điều tiết xung nhịp vì nhiệt độ; thứ hai, mô phỏng bỏ qua các đặc tính bất định của hạ tầng mạng và lưu trữ như độ trễ biến thiên, hiện tượng mất gói tin và tắc nghẽn I/O đĩa; thứ ba, mô phỏng không tính toán toàn diện các chi phí hao phí ảo hóa nảy sinh từ việc chuyển đổi ngữ cảnh liên tục của hệ điều hành và sự tranh chấp tài nguyên vật lý giữa các máy ảo trên cùng một nút mạng.
+      </p>
+    </section>
+
+    <div class="lab-divider"></div>
+
+    <!-- ======================================================= -->
+    <!--                       BÀI 3                             -->
+    <!-- ======================================================= -->
+    <section id="lab3">
+      <h2>Bài 3. Lưu trữ Phân tán: NoSQL và Lưu trữ Đối tượng</h2>
+
+      <h3 id="sec3-1">3.1. Kiến trúc lưu trữ và API CRUD tích hợp cơ sở dữ liệu NoSQL</h3>
+      <p>
+        Bài thực hành mở rộng API từ Bài 1 bằng cách tích hợp hai dịch vụ lưu trữ được quản lý: MongoDB Atlas (Cơ sở dữ liệu dưới dạng Dịch vụ — DBaaS) phục vụ lưu trữ siêu dữ liệu tài liệu dạng JSON, và Supabase Storage (Lưu trữ đối tượng) phục vụ lưu trữ tệp nhị phân đính kèm. Kiến trúc phân tách giữa dữ liệu có cấu trúc (MongoDB) và dữ liệu phi cấu trúc (Object Storage) là mô hình tiêu chuẩn trong hệ thống đám mây quy mô lớn.
+      </p>
+      <p>
+        Toàn bộ API CRUD được xây dựng bao gồm năm thao tác chính: GET <code>/notes</code> trả danh sách ghi chú có hỗ trợ lọc theo thẻ tag; GET <code>/notes/:id</code> truy vấn tài liệu đơn; POST <code>/notes</code> tạo tài liệu mới với mã phản hồi 201; PUT <code>/notes/:id</code> cập nhật với kiểm tra ràng buộc schema; DELETE <code>/notes/:id</code> xóa tài liệu với mã phản hồi 204. Ngoài ra, route POST <code>/notes/:id/attachment</code> tích hợp thư viện Multer để xử lý tải tệp dạng multipart, lưu trữ tệp lên Supabase Storage và ghi nhận URL công khai vào trường <code>attachmentUrl</code> của tài liệu tương ứng trong MongoDB.
+      </p>
+
+      <div class="metadata-block">
+        Kho lưu trữ mã nguồn: <a href="https://github.com/imkhoaformrbys/notes-api-2324802010254" target="_blank">github.com/imkhoaformrbys/notes-api-2324802010254</a><br>
+        Cụm MongoDB Atlas: <code>cloud-lab.8opjdqn.mongodb.net</code> — Vùng: AWS ap-southeast-1 (Singapore)<br>
+        Bucket Supabase Storage: <code>attachments</code> — Dự án: <code>xkwzxhzelrymhtpnragc.supabase.co</code> — Vùng: ap-southeast-1 (Singapore)<br>
+        Minh chứng tải tệp thành công: <a href="https://xkwzxhzelrymhtpnragc.supabase.co/storage/v1/object/public/attachments/6afea0c5673600d33cbb960c/1795072226597-note.txt" target="_blank">Xem tệp đính kèm trên Supabase</a>
+      </div>
+
+      <h3 id="sec3-2">3.2. Bảng đo hiệu quả chỉ mục trên bộ sưu tập 2.000 tài liệu</h3>
+      <p>
+        Script <code>scripts/seed.js</code> chèn 2.000 tài liệu mẫu với phân phối thẻ tag theo chu kỳ modulo 7 trên tập từ điển bảy giá trị. Script <code>scripts/explain.js</code> so sánh hai phương án truy vấn tài liệu có thẻ <code>docker</code>: phương án quét toàn bộ bộ sưu tập theo thứ tự vật lý (buộc bằng gợi ý <code>$natural</code>) và phương án sử dụng chỉ mục B-tree trên trường <code>tags</code> được định nghĩa tại <code>noteSchema.index({ tags: 1 })</code>. Kết quả đo đạc được trình bày tại Bảng 4.
+      </p>
+
+      <table>
+        <caption>Bảng 4. Hiệu quả truy vấn khi quét toàn bộ bộ sưu tập so với sử dụng chỉ mục B-tree trên trường tags</caption>
+        <thead>
+          <tr>
+            <th style="width: 30%;">Phương án truy vấn</th>
+            <th style="width: 23%;">Số tài liệu đã duyệt (<code>docsExamined</code>)</th>
+            <th style="width: 23%;">Số tài liệu trả về (<code>nReturned</code>)</th>
+            <th style="width: 24%;">Thời gian thực thi (ms)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Quét toàn bộ (<em>Collection Scan</em>)</td>
+            <td><strong>2.001</strong></td>
+            <td>571</td>
+            <td>1 ms</td>
+          </tr>
+          <tr>
+            <td>Sử dụng chỉ mục (<em>Index Scan</em>)</td>
+            <td><strong>571</strong></td>
+            <td>571</td>
+            <td>1 ms</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>
+        Với bộ sưu tập 2.001 tài liệu, chỉ mục B-tree giảm số tài liệu phải duyệt xuống còn 571, tương đương hệ số cải thiện <strong>3,5 lần</strong>. Chênh lệch thời gian thực thi chưa rõ rệt ở quy mô nhỏ do toàn bộ dữ liệu vừa được nạp vào bộ nhớ đệm (Buffer Pool) của MongoDB sau thao tác chèn hàng loạt. Ở quy mô sản xuất, khi kích thước bộ sưu tập vượt quá dung lượng bộ nhớ đệm khả dụng, lợi thế của chỉ mục sẽ thể hiện rõ nét hơn nhiều.
+      </p>
+
+      <h3 id="sec3-3">3.3. So sánh mô hình nhân bản: Atlas Replica Set và HDFS</h3>
+      <p>
+        MongoDB Atlas M0 (gói miễn phí) triển khai kiến trúc Replica Set ba nút gồm một nút Primary và hai nút Secondary. Mọi thao tác ghi được xử lý tại Primary và nhân bản không đồng bộ sang các Secondary thông qua cơ chế Oplog. Trong khi đó, HDFS (Hadoop Distributed File System) mặc định nhân bản mỗi khối dữ liệu (block, 128 MB) thành ba bản sao phân tán trên các DataNode khác nhau, với NameNode đóng vai trò quản lý siêu dữ liệu.
+      </p>
+
+      <table>
+        <caption>Bảng 5. So sánh mô hình nhân bản giữa MongoDB Atlas Replica Set và HDFS</caption>
+        <thead>
+          <tr>
+            <th style="width: 28%;">Tiêu chí so sánh</th>
+            <th style="width: 36%;">MongoDB Atlas Replica Set</th>
+            <th style="width: 36%;">HDFS (Hadoop Distributed File System)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Mục tiêu chung của hệ số nhân bản 3</td>
+            <td colspan="2" style="text-align:center; font-style: italic;">Dung chịu lỗi — khi một bản sao mất, hai bản còn lại tiếp tục phục vụ mà không mất dữ liệu</td>
+          </tr>
+          <tr>
+            <td>Đơn vị nhân bản</td>
+            <td>Toàn bộ dataset được nhân bản sang mỗi nút (Replica Set Member)</td>
+            <td>Từng khối dữ liệu 128 MB được nhân bản sang 3 DataNode khác nhau</td>
+          </tr>
+          <tr>
+            <td>Vai trò nút điều phối</td>
+            <td>Primary — tiếp nhận toàn bộ thao tác ghi; Secondary — phục vụ đọc tùy cấu hình</td>
+            <td>NameNode — lưu siêu dữ liệu và bản đồ khối; DataNode — lưu dữ liệu thô</td>
+          </tr>
+          <tr>
+            <td>Bầu chọn khi nút chính lỗi</td>
+            <td>Tự động bầu chọn Primary mới trong vài giây qua giao thức Raft</td>
+            <td>NameNode là điểm lỗi đơn; cần Secondary NameNode hoặc HDFS Federation để khắc phục</td>
+          </tr>
+          <tr>
+            <td>Phù hợp với loại dữ liệu</td>
+            <td>Tài liệu JSON có cấu trúc linh hoạt, truy vấn ngẫu nhiên theo ID hoặc chỉ mục</td>
+            <td>Tệp lớn (logs, video, dữ liệu batch) truy xuất tuần tự theo khối</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 id="sec3-4">3.4. Thảo luận và trả lời câu hỏi phản biện Bài 3</h3>
+      <p>
+        <strong>Câu hỏi 1: Với 2.000 tài liệu, chênh lệch thời gian thực thi nhỏ. Dựa vào docsExamined, ước lượng điều gì xảy ra khi bộ sưu tập có 2 triệu tài liệu và gói miễn phí giới hạn 100 thao tác/giây?</strong>
+      </p>
+      <p>
+        Với bộ sưu tập 2 triệu tài liệu và phân phối tag đồng đều theo 7 giá trị, một truy vấn theo thẻ <code>docker</code> sẽ trả về khoảng 571.000 tài liệu. Phương án quét toàn bộ buộc MongoDB phải duyệt toàn bộ 2.000.000 tài liệu (tăng 1.000 lần), trong khi phương án chỉ mục chỉ cần duyệt đúng 571.000 tài liệu phù hợp — hệ số cải thiện vẫn duy trì ở mức 3,5 lần. Khi mỗi thao tác quét toàn bộ tiêu hao nhiều thời gian CPU và I/O hơn, với giới hạn 100 thao tác/giây của gói miễn phí, hệ thống sẽ nhanh chóng bão hòa hàng đợi yêu cầu, dẫn đến thời gian phản hồi tăng đột biến và nguy cơ từ chối dịch vụ trong giờ cao điểm. Chỉ mục trong tình huống này trở thành điều kiện bắt buộc, không còn là tối ưu hóa tùy chọn.
+      </p>
+
+      <p>
+        <strong>Câu hỏi 2: Vì sao lưu tệp trên Supabase Storage rồi chỉ lưu URL trong MongoDB, thay vì lưu thẳng nội dung tệp vào tài liệu MongoDB?</strong>
+      </p>
+      <p>
+        MongoDB áp đặt giới hạn kích thước tối đa 16 MB trên mỗi tài liệu BSON, không phù hợp để lưu trữ nội dung tệp nhị phân có kích thước lớn như hình ảnh, video hoặc tài liệu văn phòng. Hơn nữa, nhúng dữ liệu nhị phân trực tiếp vào tài liệu JSON làm tăng đáng kể dung lượng Working Set cần nạp vào bộ nhớ RAM của MongoDB, gây suy giảm hiệu năng truy vấn trên toàn bộ bộ sưu tập. Ngược lại, Supabase Storage (xây dựng trên nền Amazon S3 hoặc tương đương) được tối ưu chuyên biệt cho lưu trữ và phân phối tệp nhị phân quy mô lớn, hỗ trợ phân phối nội dung qua CDN và tải xuống trực tiếp. Kiến trúc phân tách siêu dữ liệu (MongoDB) và dữ liệu nhị phân (Object Storage) là mô hình thiết kế chuẩn trong các hệ thống phân tán, cho phép mở rộng quy mô từng tầng độc lập nhau.
+      </p>
+
+      <p>
+        <strong>Câu hỏi 3: Atlas nhân bản 3 nút; HDFS mặc định nhân bản 3 khối. Mục tiêu chung của con số 3 là gì, và hai hệ thống khác nhau ở đơn vị nhân bản ra sao?</strong>
+      </p>
+      <p>
+        Con số 3 bản sao trong cả hai hệ thống đều nhắm đến cùng một mục tiêu: đảm bảo khả năng dung chịu lỗi đồng thời của tối đa 2 nút mà không mất dữ liệu, đồng thời đạt được sự cân bằng kinh tế hợp lý giữa mức độ dự phòng và chi phí lưu trữ. Tuy nhiên, hai hệ thống khác nhau căn bản ở đơn vị nhân bản: MongoDB Atlas nhân bản <em>toàn bộ dataset</em> sang từng nút trong Replica Set — mỗi nút Member đều lưu trữ một bản sao đầy đủ của toàn bộ cơ sở dữ liệu, phù hợp với mô hình truy vấn ngẫu nhiên và cập nhật tại chỗ. Trong khi đó, HDFS nhân bản từng <em>khối vật lý</em> 128 MB sang 3 DataNode khác nhau — dữ liệu của một tệp lớn được phân mảnh thành nhiều khối và mỗi khối được phân tán rải rác trên hạ tầng, phù hợp với mô hình đọc tuần tự khối lượng lớn của các tác vụ xử lý dữ liệu hàng loạt (batch processing).
       </p>
     </section>
 
