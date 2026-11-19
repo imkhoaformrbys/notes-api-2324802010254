@@ -631,27 +631,27 @@ docs</code></pre>
         <tbody>
           <tr>
             <td>Mục tiêu chung của hệ số nhân bản 3</td>
-            <td colspan="2" style="text-align:center; font-style: italic;">Dung chịu lỗi — khi một bản sao mất, hai bản còn lại tiếp tục phục vụ mà không mất dữ liệu</td>
+            <td colspan="2" style="text-align:center; font-style: italic;">Khả năng chịu lỗi (Fault Tolerance) và đảm bảo tính sẵn sàng cao (High Availability) mà không làm phát sinh chi phí lưu trữ quá mức</td>
           </tr>
           <tr>
             <td>Đơn vị nhân bản</td>
-            <td>Toàn bộ dataset được nhân bản sang mỗi nút (Replica Set Member)</td>
-            <td>Từng khối dữ liệu 128 MB được nhân bản sang 3 DataNode khác nhau</td>
+            <td>Toàn bộ tập dữ liệu (dataset) được sao chép sang từng nút thành viên (Replica Set Member)</td>
+            <td>Từng khối dữ liệu vật lý (Block, mặc định 128 MB) được phân tán sang 3 DataNode khác nhau</td>
           </tr>
           <tr>
             <td>Vai trò nút điều phối</td>
-            <td>Primary — tiếp nhận toàn bộ thao tác ghi; Secondary — phục vụ đọc tùy cấu hình</td>
-            <td>NameNode — lưu siêu dữ liệu và bản đồ khối; DataNode — lưu dữ liệu thô</td>
+            <td>Primary tiếp nhận toàn bộ thao tác ghi; Secondary sao chép dữ liệu qua Oplog và hỗ trợ phân tải đọc</td>
+            <td>NameNode quản lý siêu dữ liệu (metadata) và không gian tên tập tin; DataNode lưu trữ và phục vụ khối dữ liệu thô</td>
           </tr>
           <tr>
-            <td>Bầu chọn khi nút chính lỗi</td>
-            <td>Tự động bầu chọn Primary mới trong vài giây qua giao thức Raft</td>
-            <td>NameNode là điểm lỗi đơn; cần Secondary NameNode hoặc HDFS Federation để khắc phục</td>
+            <td>Cơ chế phục hồi khi nút chính gặp sự cố</td>
+            <td>Tự động tổ chức bầu chọn Primary mới trong vài giây dựa trên thuật toán đồng thuận đa số (Quorum Consensus)</td>
+            <td>Nguy cơ điểm lỗi đơn (SPOF) tại NameNode truyền thống; xử lý triệt để thông qua kiến trúc HDFS High Availability (Active/Standby NameNode kết hợp QJM và ZooKeeper)</td>
           </tr>
           <tr>
-            <td>Phù hợp với loại dữ liệu</td>
-            <td>Tài liệu JSON có cấu trúc linh hoạt, truy vấn ngẫu nhiên theo ID hoặc chỉ mục</td>
-            <td>Tệp lớn (logs, video, dữ liệu batch) truy xuất tuần tự theo khối</td>
+            <td>Đặc thù khối lượng công việc tối ưu</td>
+            <td>Dữ liệu tài liệu bán cấu trúc (BSON/JSON), hỗ trợ truy vấn ngẫu nhiên linh hoạt theo trường thuộc tính và chỉ mục</td>
+            <td>Tệp dữ liệu lớn (Big Data, log, streaming), tối ưu hóa cho mô hình xử lý hàng loạt tuần tự (Batch Processing / MapReduce)</td>
           </tr>
         </tbody>
       </table>
@@ -661,21 +661,33 @@ docs</code></pre>
         <strong>Câu hỏi 1: Với 2.000 tài liệu, chênh lệch thời gian thực thi nhỏ. Dựa vào docsExamined, ước lượng điều gì xảy ra khi bộ sưu tập có 2 triệu tài liệu và gói miễn phí giới hạn 100 thao tác/giây?</strong>
       </p>
       <p>
-        Với bộ sưu tập 2 triệu tài liệu và phân phối tag đồng đều theo 7 giá trị, một truy vấn theo thẻ <code>docker</code> sẽ trả về khoảng 571.000 tài liệu. Phương án quét toàn bộ buộc MongoDB phải duyệt toàn bộ 2.000.000 tài liệu (tăng 1.000 lần), trong khi phương án chỉ mục chỉ cần duyệt đúng 571.000 tài liệu phù hợp — hệ số cải thiện vẫn duy trì ở mức 3,5 lần. Khi mỗi thao tác quét toàn bộ tiêu hao nhiều thời gian CPU và I/O hơn, với giới hạn 100 thao tác/giây của gói miễn phí, hệ thống sẽ nhanh chóng bão hòa hàng đợi yêu cầu, dẫn đến thời gian phản hồi tăng đột biến và nguy cơ từ chối dịch vụ trong giờ cao điểm. Chỉ mục trong tình huống này trở thành điều kiện bắt buộc, không còn là tối ưu hóa tùy chọn.
+        Ở quy mô 2.000 tài liệu, dữ liệu nằm trọn vẹn trong bộ nhớ đệm RAM (WiredTiger cache), do đó độ trễ I/O đĩa chưa bộc lộ rõ nét. Tuy nhiên, khi quy mô dữ liệu mở rộng lên 2.000.000 tài liệu, phương pháp quét toàn bộ (Collection Scan - <code>COLLSCAN</code>) buộc công cụ truy vấn phải nạp tuần tự toàn bộ các khối dữ liệu từ bộ nhớ thứ cấp, dẫn đến hiện tượng tráo đổi bộ nhớ đệm liên tục (cache thrashing) và tiêu tốn tài nguyên CPU ở mức nghiêm trọng. Với phân phối 7 thẻ đồng đều, một truy vấn thẻ <code>docker</code> chỉ trả về xấp xỉ 285.700 tài liệu hữu ích. Nếu không có chỉ mục, hệ thống phải kiểm tra dư thừa hơn 1,71 triệu tài liệu vô nghĩa cho mỗi yêu cầu. Dưới hạn mức khắt khe 100 thao tác/giây (ops/second) của tầng M0 Free, hiện tượng nghẽn cổ chai I/O sẽ khiến hàng đợi yêu cầu bão hòa tức thì, làm suy giảm nghiêm trọng thông lượng hệ thống và dẫn đến tình trạng từ chối dịch vụ (HTTP 503 / 504 Gateway Timeout). Ngược lại, chỉ mục B-tree chuyển độ phức tạp tìm kiếm từ tuyến tính \(\mathcal{O}(N)\) xuống \(\mathcal{O}(\log N + K)\) (với \(K\) là số tài liệu khớp), đảm bảo hiệu năng ổn định và kiểm soát chặt chẽ ngân sách I/O của hạ tầng.
       </p>
 
       <p>
         <strong>Câu hỏi 2: Vì sao lưu tệp trên Supabase Storage rồi chỉ lưu URL trong MongoDB, thay vì lưu thẳng nội dung tệp vào tài liệu MongoDB?</strong>
       </p>
       <p>
-        MongoDB áp đặt giới hạn kích thước tối đa 16 MB trên mỗi tài liệu BSON, không phù hợp để lưu trữ nội dung tệp nhị phân có kích thước lớn như hình ảnh, video hoặc tài liệu văn phòng. Hơn nữa, nhúng dữ liệu nhị phân trực tiếp vào tài liệu JSON làm tăng đáng kể dung lượng Working Set cần nạp vào bộ nhớ RAM của MongoDB, gây suy giảm hiệu năng truy vấn trên toàn bộ bộ sưu tập. Ngược lại, Supabase Storage (xây dựng trên nền Amazon S3 hoặc tương đương) được tối ưu chuyên biệt cho lưu trữ và phân phối tệp nhị phân quy mô lớn, hỗ trợ phân phối nội dung qua CDN và tải xuống trực tiếp. Kiến trúc phân tách siêu dữ liệu (MongoDB) và dữ liệu nhị phân (Object Storage) là mô hình thiết kế chuẩn trong các hệ thống phân tán, cho phép mở rộng quy mô từng tầng độc lập nhau.
+        Thiết kế phân tách siêu dữ liệu (metadata) và tệp nhị phân (BLOB) bắt nguồn từ các nguyên lý kiến trúc đám mây và giới hạn kỹ thuật của hệ quản trị cơ sở dữ liệu:
+      </p>
+      <p>
+        Thứ nhất, MongoDB áp đặt hạn mức kích thước tài liệu BSON cứng ở mức 16 MB. Mặc dù GridFS cho phép chia nhỏ tệp lớn thành các mảnh (chunks), phương thức này làm tăng đột biến khối lượng truy vấn điều phối trong cơ sở dữ liệu và làm phình to tập làm việc (Working Set), đẩy các chỉ mục quan trọng ra khỏi RAM. Thứ hai, cơ sở dữ liệu tài liệu NoSQL được tối ưu cho các thao tác đọc/ghi siêu dữ liệu có cấu trúc với tần suất cao, trong khi dịch vụ lưu trữ đối tượng (Supabase Storage / Amazon S3) được thiết kế chuyên biệt để phân phối dữ liệu nhị phân dung lượng lớn với chi phí thấp trên mỗi gigabyte, tích hợp sẵn mạng lưới phân phối nội dung (CDN) toàn cầu và hỗ trợ truyền phát trực tiếp (Range Requests / Streaming) đến người dùng cuối mà không đi qua máy chủ ứng dụng. Tách biệt hai tầng lưu trữ giúp hệ thống mở rộng độc lập (Independent Scalability) và tối ưu hóa chi phí vận hành.
       </p>
 
       <p>
         <strong>Câu hỏi 3: Atlas nhân bản 3 nút; HDFS mặc định nhân bản 3 khối. Mục tiêu chung của con số 3 là gì, và hai hệ thống khác nhau ở đơn vị nhân bản ra sao?</strong>
       </p>
       <p>
-        Con số 3 bản sao trong cả hai hệ thống đều nhắm đến cùng một mục tiêu: đảm bảo khả năng dung chịu lỗi đồng thời của tối đa 2 nút mà không mất dữ liệu, đồng thời đạt được sự cân bằng kinh tế hợp lý giữa mức độ dự phòng và chi phí lưu trữ. Tuy nhiên, hai hệ thống khác nhau căn bản ở đơn vị nhân bản: MongoDB Atlas nhân bản <em>toàn bộ dataset</em> sang từng nút trong Replica Set — mỗi nút Member đều lưu trữ một bản sao đầy đủ của toàn bộ cơ sở dữ liệu, phù hợp với mô hình truy vấn ngẫu nhiên và cập nhật tại chỗ. Trong khi đó, HDFS nhân bản từng <em>khối vật lý</em> 128 MB sang 3 DataNode khác nhau — dữ liệu của một tệp lớn được phân mảnh thành nhiều khối và mỗi khối được phân tán rải rác trên hạ tầng, phù hợp với mô hình đọc tuần tự khối lượng lớn của các tác vụ xử lý dữ liệu hàng loạt (batch processing).
+        Con số 3 bản sao trong cả hai kiến trúc phân tán đại diện cho điểm cân bằng tối ưu giữa khả năng chịu lỗi (Fault Tolerance) và chi phí tài nguyên phần cứng (overhead lưu trữ định mức 300%). Trong lý thuyết hệ thống phân tán, để giải quyết bài toán đồng thuận và chống hiện tượng phân mảnh não (Split-Brain), một cụm cần đạt đa số phiếu biểu quyết (Quorum Majority \(= \lfloor N/2 \rfloor + 1\)). Với \(N = 3\), túc số đa số là 2, cho phép hệ thống chịu được sự cố hỏng hóc độc lập của đúng 1 nút mà vẫn đảm bảo tính sẵn sàng ghi và tính nhất quán mạnh mẽ. Nếu tăng lên 4 nút, khả năng chịu lỗi ghi vẫn chỉ là 1 nút (do đa số cần 3 nút) nhưng chi phí tăng thêm 33%.
+      </p>
+      <p>
+        Mặc dù có chung mục tiêu sẵn sàng cao, hai hệ thống phân tách rõ rệt về đơn vị nhân bản và triết lý thiết kế:
+      </p>
+      <p>
+        1. <em>MongoDB Atlas (Replica Set):</em> Đơn vị nhân bản là <strong>toàn bộ tập dữ liệu logic</strong> (Database-level). Mỗi nút trong bộ ba sở hữu một bản sao đầy đủ của toàn bộ cơ sở dữ liệu. Kiến trúc này phục vụ mô hình đọc/ghi ngẫu nhiên (OLTP) với độ trễ thấp; dữ liệu được đồng bộ liên tục qua nhật ký thao tác (Oplog).
+      </p>
+      <p>
+        2. <em>HDFS (Hadoop Distributed File System):</em> Đơn vị nhân bản là <strong>từng khối nhị phân vật lý</strong> (Block-level, kích thước mặc định 128 MB). Một tập tin dung lượng lớn được phân mảnh thành hàng nghìn khối và các bản sao của từng khối được phân tán độc lập trên các DataNode thuộc các tủ mạng (Rack) khác nhau. Kiến trúc này phục vụ mô hình phân tích xử lý dữ liệu lớn theo lô (Batch Processing / MapReduce), tối ưu cho việc đọc tuần tự khối lượng khổng lồ dựa trên nguyên lý dịch chuyển phép tính đến gần vị trí dữ liệu (Data Locality).
       </p>
     </section>
 
