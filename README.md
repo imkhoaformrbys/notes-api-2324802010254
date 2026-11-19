@@ -11,7 +11,6 @@ Báo cáo thực hành học phần **Điện toán Đám mây** — TDMU 2026�
 
 | Hạng mục | Đường dẫn |
 |---|---|
-| Báo cáo GitHub Pages (Bài 1, 2, 3) | https://imkhoaformrbys.github.io/notes-api-2324802010254/ |
 | Báo cáo — Bài 1 | https://imkhoaformrbys.github.io/notes-api-2324802010254/#lab1 |
 | Báo cáo — Bài 2 | https://imkhoaformrbys.github.io/notes-api-2324802010254/#lab2 |
 | Báo cáo — Bài 3 | https://imkhoaformrbys.github.io/notes-api-2324802010254/#lab3 |
